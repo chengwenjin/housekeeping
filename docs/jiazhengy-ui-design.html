@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家政小程序 UI 设计方案</title>
+<style>
+:root {
+  --primary: #FF6B35;
+  --primary-light: #FF8C5A;
+  --secondary: #2EC4B6;
+  --grad-header: linear-gradient(135deg, #FF6B35 0%, #FF9A3C 60%, #FFB347 100%);
+  --grad-primary: linear-gradient(135deg, #FF6B35, #FFB347);
+  --grad-teal: linear-gradient(135deg, #2EC4B6, #4DD9CC);
+  --grad-purple: linear-gradient(135deg, #667eea, #764ba2);
+  --gray-50: #FAFAFA; --gray-100: #F5F5F5; --gray-200: #EEEEEE;
+  --gray-300: #E0E0E0; --gray-400: #BDBDBD; --gray-500: #9E9E9E;
+  --gray-600: #757575; --gray-700: #616161; --gray-800: #424242; --gray-900: #212121;
+  --success: #4CAF50; --warning: #FF9800; --error: #F44336; --info: #2196F3;
+  --font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-primary: 0 4px 20px rgba(255,107,53,0.35);
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-full: 9999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: var(--font); background:#F0F2F5; color:var(--gray-900); }
+
+/* ===== 页面容器 ===== */
+.canvas { max-width:1500px; margin:0 auto; padding:40px 24px; }
+.page-title { text-align:center; margin-bottom:48px; }
+.page-title h1 {
+  font-size:32px; font-weight:800;
+  background: var(--grad-header);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:8px;
+}
+.page-title p { color:var(--gray-500); font-size:15px; }
+.page-title .badge-row { display:flex; gap:8px; justify-content:center; margin-top:12px; }
+.badge { padding:4px 12px; border-radius:var(--r-full); font-size:12px; font-weight:600; }
+.badge-orange { background:#FFF0EB; color:var(--primary); }
+.badge-teal { background:#E6FAF9; color:var(--secondary); }
+.badge-purple { background:#F0EEFF; color:#667eea; }
+
+/* 设计系统展示 */
+.ds-section { background:white; border-radius:var(--r-xl); padding:28px; margin-bottom:32px; box-shadow:var(--shadow-card); }
+.section-heading { font-size:18px; font-weight:700; color:var(--gray-800); margin-bottom:20px; padding-left:12px; border-left:4px solid var(--primary); }
+.ds-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.ds-block h4 { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--gray-500); margin-bottom:12px; }
+.color-swatches { display:flex; gap:8px; flex-wrap:wrap; }
+.swatch-wrap { text-align:center; }
+.swatch { width:48px; height:48px; border-radius:10px; margin-bottom:4px; box-shadow:var(--shadow-sm); }
+.swatch-name { font-size:10px; color:var(--gray-500); }
+.comp-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:none; cursor:pointer; font-family:var(--font); font-weight:600; transition:all 0.2s; }
+.btn-primary { background:var(--grad-primary); color:white; padding:10px 20px; border-radius:var(--r-full); font-size:14px; box-shadow:var(--shadow-primary); }
+.btn-outline { background:transparent; color:var(--primary); border:1.5px solid var(--primary); padding:9px 18px; border-radius:var(--r-full); font-size:14px; }
+.btn-teal { background:var(--grad-teal); color:white; padding:10px 20px; border-radius:var(--r-full); font-size:14px; }
+.btn-sm { padding:6px 14px; font-size:12px; border-radius:var(--r-full); font-weight:600; }
+.chip { display:inline-block; padding:4px 10px; border-radius:var(--r-full); font-size:12px; font-weight:500; }
+.chip-orange { background:#FFF0EB; color:var(--primary); }
+.chip-teal { background:#E6FAF9; color:var(--secondary); }
+.chip-green { background:#E8F5E9; color:var(--success); }
+.chip-yellow { background:#FFF8E1; color:var(--warning); }
+.tag-row { display:flex; gap:6px; flex-wrap:wrap; }
+.type-scale { display:flex; flex-direction:column; gap:6px; }
+.t1 { font-size:22px; font-weight:700; color:var(--gray-900); }
+.t2 { font-size:18px; font-weight:600; color:var(--gray-800); }
+.t3 { font-size:15px; font-weight:500; color:var(--gray-700); }
+.t4 { font-size:13px; color:var(--gray-600); }
+.t5 { font-size:11px; color:var(--gray-400); }
+
+/* ===== 手机框架网格 ===== */
+.phones-row { display:grid; grid-template-columns:repeat(5,1fr); gap:20px; margin-bottom:48px; }
+.phone-col { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.phone-name { font-size:13px; font-weight:700; color:var(--gray-700); text-align:center; }
+.phone-desc { font-size:11px; color:var(--gray-400); text-align:center; line-height:1.4; }
+.phone {
+  width:200px; height:432px;
+  background:white; border-radius:32px;
+  box-shadow: 0 0 0 7px #1C1C1E, 0 16px 48px rgba(0,0,0,0.25);
+  overflow:hidden; position:relative; flex-shrink:0;
+}
+.phone::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:72px; height:20px; background:#1C1C1E;
+  border-radius:0 0 13px 13px; z-index:100;
+}
+.screen { width:100%; height:100%; overflow-y:auto; overflow-x:hidden; background:var(--gray-50); scrollbar-width:none; }
+.screen::-webkit-scrollbar { display:none; }
+
+/* ===== 通用UI组件 ===== */
+.status-bar {
+  height:40px; display:flex; align-items:flex-end; justify-content:space-between;
+  padding:0 16px 6px; position:sticky; top:0; z-index:50;
+  font-size:11px; font-weight:700;
+}
+.status-bar.on-dark { background:transparent; color:white; }
+.status-bar.on-light { background:white; color:var(--gray-800); border-bottom:0.5px solid var(--gray-100); }
+.status-bar.on-orange { color:white; }
+
+.tab-bar {
+  position:sticky; bottom:0; background:white;
+  border-top:0.5px solid var(--gray-200);
+  display:flex; padding:8px 0 16px; z-index:50;
+}
+.tab-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.tab-icon { font-size:20px; line-height:1; }
+.tab-text { font-size:10px; color:var(--gray-400); }
+.tab-item.active .tab-text { color:var(--primary); font-weight:600; }
+
+/* ===== 首页 ===== */
+.home-header {
+  background: var(--grad-header);
+  padding:40px 14px 16px;
+  position:sticky; top:0; z-index:40;
+}
+.home-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.home-loc { display:flex; align-items:center; gap:4px; color:rgba(255,255,255,0.9); font-size:12px; }
+.home-loc strong { color:white; font-size:13px; }
+.home-avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(255,255,255,0.6); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.search-bar {
+  background:rgba(255,255,255,0.95); border-radius:var(--r-full);
+  display:flex; align-items:center; gap:8px; padding:9px 14px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.12);
+}
+.search-bar span { color:var(--gray-400); font-size:13px; flex:1; }
+.search-icon { font-size:15px; color:var(--gray-400); }
+
+.home-cats {
+  background:white; padding:14px;
+  display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
+}
+.home-cats::-webkit-scrollbar { display:none; }
+.cat-item { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:52px; }
+.cat-icon-wrap { width:44px; height:44px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-size:22px; }
+.cat-icon-wrap.c1 { background:linear-gradient(135deg,#FFE0D0,#FFCDB0); }
+.cat-icon-wrap.c2 { background:linear-gradient(135deg,#D0F0EE,#B0E8E4); }
+.cat-icon-wrap.c3 { background:linear-gradient(135deg,#D0E8FF,#B0D4FF); }
+.cat-icon-wrap.c4 { background:linear-gradient(135deg,#F0D0FF,#E0B0FF); }
+.cat-icon-wrap.c5 { background:linear-gradient(135deg,#D0FFE0,#B0F0C0); }
+.cat-text { font-size:11px; color:var(--gray-600); font-weight:500; white-space:nowrap; }
+
+.banner { margin:12px 14px; border-radius:var(--r-lg); overflow:hidden; height:90px; background:linear-gradient(135deg,#FF6B35,#FF9A3C,#FFB347); position:relative; display:flex; align-items:center; padding:0 16px; }
+.banner-text h3 { color:white; font-size:15px; font-weight:700; }
+.banner-text p { color:rgba(255,255,255,0.85); font-size:11px; margin-top:3px; }
+.banner-btn { position:absolute; right:16px; background:white; color:var(--primary); padding:6px 14px; border-radius:var(--r-full); font-size:11px; font-weight:700; }
+.banner-decor { position:absolute; right:80px; bottom:-10px; font-size:64px; opacity:0.2; }
+
+.section-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 14px 8px; }
+.section-bar h3 { font-size:15px; font-weight:700; color:var(--gray-900); }
+.section-bar a { font-size:12px; color:var(--primary); }
+
+.demand-card {
+  margin:0 14px 12px; background:white; border-radius:var(--r-lg);
+  padding:14px; box-shadow:var(--shadow-card);
+}
+.demand-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+.demand-user { display:flex; align-items:center; gap:8px; }
+.user-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.ua1 { background:linear-gradient(135deg,#FFE0D0,#FFCDB0); }
+.ua2 { background:linear-gradient(135deg,#D0F0EE,#B0E8E4); }
+.ua3 { background:linear-gradient(135deg,#D0E8FF,#B0D4FF); }
+.ua4 { background:linear-gradient(135deg,#F0D0FF,#E0B0FF); }
+.user-info .uname { font-size:13px; font-weight:600; color:var(--gray-800); }
+.user-info .utime { font-size:11px; color:var(--gray-400); margin-top:1px; }
+.demand-status { font-size:11px; font-weight:600; padding:3px 8px; border-radius:var(--r-full); }
+.ds-open { background:#FFF0EB; color:var(--primary); }
+.ds-taken { background:#E8F5E9; color:var(--success); }
+
+.demand-title { font-size:14px; font-weight:600; color:var(--gray-900); margin-bottom:6px; }
+.demand-desc { font-size:12px; color:var(--gray-500); line-height:1.5; margin-bottom:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.demand-meta { display:flex; gap:10px; margin-bottom:10px; }
+.meta-item { display:flex; align-items:center; gap:3px; font-size:11px; color:var(--gray-500); }
+.demand-footer { display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:0.5px solid var(--gray-100); }
+.demand-price { font-size:16px; font-weight:700; color:var(--primary); }
+.demand-price span { font-size:12px; font-weight:500; }
+.btn-take { background:var(--grad-primary); color:white; border:none; padding:7px 16px; border-radius:var(--r-full); font-size:12px; font-weight:700; cursor:pointer; box-shadow:var(--shadow-primary); }
+.btn-take-sm { background:transparent; color:var(--secondary); border:1.5px solid var(--secondary); padding:5px 12px; border-radius:var(--r-full); font-size:11px; font-weight:600; cursor:pointer; }
+
+/* ===== 需求详情页 ===== */
+.detail-header {
+  background: var(--grad-header);
+  padding:40px 14px 20px;
+}
+.detail-nav { display:flex; align-items:center; gap:8px; color:white; font-size:15px; font-weight:600; margin-bottom:16px; }
+.detail-nav span { opacity:0.8; font-size:13px; cursor:pointer; }
+.detail-card {
+  background:white; border-radius:var(--r-xl) var(--r-xl) 0 0;
+  margin-top:-12px; padding:20px 14px 0;
+}
+.detail-badge-row { display:flex; gap:6px; margin-bottom:10px; }
+.detail-title { font-size:17px; font-weight:700; color:var(--gray-900); margin-bottom:8px; line-height:1.4; }
+.detail-desc { font-size:13px; color:var(--gray-600); line-height:1.7; margin-bottom:14px; }
+.detail-meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.detail-meta-item { background:var(--gray-50); border-radius:var(--r-md); padding:10px 12px; }
+.dmi-label { font-size:10px; color:var(--gray-400); margin-bottom:3px; }
+.dmi-val { font-size:13px; font-weight:600; color:var(--gray-800); }
+.divider { height:0.5px; background:var(--gray-100); margin:14px 0; }
+.poster-row { display:flex; align-items:center; justify-content:space-between; }
+.poster-info { display:flex; align-items:center; gap:10px; }
+.poster-avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,#FFE0D0,#FFCDB0); display:flex; align-items:center; justify-content:center; font-size:22px; }
+.poster-name { font-size:14px; font-weight:600; color:var(--gray-800); }
+.poster-rating { font-size:11px; color:var(--gray-400); display:flex; align-items:center; gap:2px; margin-top:2px; }
+.follow-btn { background:transparent; border:1.5px solid var(--secondary); color:var(--secondary); padding:6px 14px; border-radius:var(--r-full); font-size:12px; font-weight:600; cursor:pointer; }
+.comment-section { padding:0 14px 80px; background:white; }
+.comment-card { display:flex; gap:10px; margin-bottom:14px; }
+.comment-ava { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#D0F0EE,#B0E8E4); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.comment-body { flex:1; }
+.comment-name { font-size:12px; font-weight:600; color:var(--gray-700); }
+.comment-text { font-size:12px; color:var(--gray-600); line-height:1.5; margin-top:3px; }
+.comment-time { font-size:10px; color:var(--gray-400); margin-top:3px; }
+.detail-bottom-bar {
+  position:sticky; bottom:0; background:white;
+  border-top:0.5px solid var(--gray-100);
+  padding:10px 14px 24px;
+  display:flex; gap:10px; align-items:center;
+}
+.price-display { flex:1; }
+.price-display .price { font-size:22px; font-weight:800; color:var(--primary); }
+.price-display .price-label { font-size:11px; color:var(--gray-400); }
+.btn-large { flex:2; background:var(--grad-primary); color:white; border:none; padding:13px; border-radius:var(--r-full); font-size:15px; font-weight:700; cursor:pointer; box-shadow:var(--shadow-primary); }
+.btn-chat { background:var(--gray-100); color:var(--gray-700); border:none; padding:13px 16px; border-radius:var(--r-full); font-size:20px; cursor:pointer; }
+
+/* ===== 发布需求页 ===== */
+.publish-header {
+  background:white; padding:40px 14px 14px;
+  border-bottom:0.5px solid var(--gray-100);
+  display:flex; align-items:center; gap:10px;
+}
+.back-btn { width:32px; height:32px; border-radius:50%; background:var(--gray-100); display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; flex-shrink:0; }
+.publish-header h2 { font-size:16px; font-weight:700; }
+.publish-form { padding:14px; }
+.form-section { background:white; border-radius:var(--r-lg); padding:14px; margin-bottom:12px; box-shadow:var(--shadow-card); }
+.form-section h4 { font-size:13px; font-weight:700; color:var(--gray-700); margin-bottom:12px; }
+.form-item { margin-bottom:12px; }
+.form-label { font-size:12px; color:var(--gray-500); margin-bottom:6px; display:flex; align-items:center; gap:4px; }
+.form-label .required { color:var(--error); }
+.form-input {
+  width:100%; border:1.5px solid var(--gray-200); border-radius:var(--r-md);
+  padding:10px 12px; font-size:13px; font-family:var(--font); outline:none;
+  background:var(--gray-50); color:var(--gray-800);
+}
+.form-input:focus { border-color:var(--primary); background:white; }
+.form-textarea { width:100%; border:1.5px solid var(--gray-200); border-radius:var(--r-md); padding:10px 12px; font-size:13px; font-family:var(--font); outline:none; background:var(--gray-50); resize:none; height:72px; }
+.form-textarea:focus { border-color:var(--primary); background:white; }
+.cat-select-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.cat-sel-item { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 4px; border-radius:var(--r-md); border:1.5px solid var(--gray-200); cursor:pointer; transition:all 0.15s; }
+.cat-sel-item.selected { border-color:var(--primary); background:#FFF0EB; }
+.cat-sel-icon { font-size:18px; }
+.cat-sel-text { font-size:10px; color:var(--gray-600); font-weight:500; }
+.cat-sel-item.selected .cat-sel-text { color:var(--primary); }
+.price-row { display:flex; gap:8px; align-items:center; }
+.price-prefix { font-size:16px; font-weight:700; color:var(--primary); }
+.price-input { flex:1; border:1.5px solid var(--gray-200); border-radius:var(--r-md); padding:10px 12px; font-size:16px; font-weight:700; color:var(--primary); background:var(--gray-50); outline:none; font-family:var(--font); }
+.price-unit { font-size:12px; color:var(--gray-400); white-space:nowrap; }
+.photo-upload { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.photo-thumb { width:60px; height:60px; border-radius:var(--r-md); background:linear-gradient(135deg,#FFE0D0,#FFCDB0); display:flex; align-items:center; justify-content:center; font-size:24px; }
+.photo-add { width:60px; height:60px; border-radius:var(--r-md); border:1.5px dashed var(--gray-300); background:var(--gray-50); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; }
+.photo-add span { font-size:20px; color:var(--gray-400); }
+.photo-add p { font-size:9px; color:var(--gray-400); }
+.publish-btn-wrap { padding:0 14px 32px; }
+.publish-btn { width:100%; background:var(--grad-primary); color:white; border:none; padding:14px; border-radius:var(--r-full); font-size:16px; font-weight:700; cursor:pointer; box-shadow:var(--shadow-primary); }
+
+/* ===== 我的页面 ===== */
+.mine-header {
+  background: var(--grad-header);
+  padding:40px 14px 24px;
+}
+.mine-user-row { display:flex; align-items:center; gap:12px; }
+.mine-avatar { width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.3); border:3px solid rgba(255,255,255,0.7); display:flex; align-items:center; justify-content:center; font-size:30px; }
+.mine-info h2 { color:white; font-size:17px; font-weight:700; }
+.mine-info p { color:rgba(255,255,255,0.8); font-size:12px; margin-top:2px; }
+.mine-edit-btn { margin-left:auto; background:rgba(255,255,255,0.25); color:white; border:1px solid rgba(255,255,255,0.5); padding:5px 12px; border-radius:var(--r-full); font-size:11px; font-weight:600; cursor:pointer; }
+.mine-stats { display:grid; grid-template-columns:repeat(4,1fr); margin-top:16px; background:rgba(255,255,255,0.15); border-radius:var(--r-lg); overflow:hidden; }
+.stat-item { padding:10px 0; text-align:center; border-right:0.5px solid rgba(255,255,255,0.2); }
+.stat-item:last-child { border-right:none; }
+.stat-num { font-size:18px; font-weight:700; color:white; }
+.stat-label { font-size:10px; color:rgba(255,255,255,0.75); margin-top:1px; }
+
+.mine-body { padding:14px; }
+.mine-card { background:white; border-radius:var(--r-lg); margin-bottom:12px; overflow:hidden; box-shadow:var(--shadow-card); }
+.mine-card-header { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-bottom:0.5px solid var(--gray-100); }
+.mine-card-header h3 { font-size:14px; font-weight:700; color:var(--gray-800); }
+.mine-card-header a { font-size:12px; color:var(--primary); }
+.order-item { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:0.5px solid var(--gray-100); }
+.order-item:last-child { border-bottom:none; }
+.order-icon { width:40px; height:40px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.oi1 { background:linear-gradient(135deg,#FFE0D0,#FFCDB0); }
+.oi2 { background:linear-gradient(135deg,#D0F0EE,#B0E8E4); }
+.oi3 { background:linear-gradient(135deg,#D0E8FF,#B0D4FF); }
+.order-detail { flex:1; }
+.order-title { font-size:13px; font-weight:600; color:var(--gray-800); }
+.order-sub { font-size:11px; color:var(--gray-400); margin-top:2px; }
+.order-right { text-align:right; }
+.order-price { font-size:14px; font-weight:700; color:var(--primary); }
+.order-status { font-size:10px; margin-top:2px; padding:2px 7px; border-radius:var(--r-full); display:inline-block; }
+.os-pending { background:#FFF8E1; color:var(--warning); }
+.os-done { background:#E8F5E9; color:var(--success); }
+.os-active { background:#FFF0EB; color:var(--primary); }
+
+.menu-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-bottom:0.5px solid var(--gray-100); cursor:pointer; }
+.menu-item:last-child { border-bottom:none; }
+.menu-icon-wrap { width:36px; height:36px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-size:18px; }
+.mi1 { background:linear-gradient(135deg,#FFE0D0,#FFCDB0); }
+.mi2 { background:linear-gradient(135deg,#D0F0EE,#B0E8E4); }
+.mi3 { background:linear-gradient(135deg,#D0E8FF,#B0D4FF); }
+.mi4 { background:linear-gradient(135deg,#F0D0FF,#E0B0FF); }
+.mi5 { background:linear-gradient(135deg,#D0FFE0,#B0F0C0); }
+.menu-label { flex:1; font-size:14px; color:var(--gray-800); font-weight:500; }
+.menu-arrow { font-size:16px; color:var(--gray-300); }
+
+/* ===== 足迹/关注页 ===== */
+.follow-header { background:white; padding:40px 14px 0; border-bottom:0.5px solid var(--gray-200); position:sticky; top:0; z-index:40; }
+.follow-nav-row { display:flex; align-items:center; gap:10px; padding-bottom:0; }
+.follow-nav-row .back-btn { margin-bottom:0; }
+.follow-nav-row h2 { font-size:16px; font-weight:700; margin-bottom:0; }
+.follow-tabs { display:flex; margin-top:10px; }
+.ftab { flex:1; text-align:center; padding:10px 0; font-size:13px; font-weight:500; color:var(--gray-400); border-bottom:2px solid transparent; }
+.ftab.active { color:var(--primary); font-weight:700; border-bottom:2px solid var(--primary); }
+.follow-body { padding:14px; }
+.follow-user-item { display:flex; align-items:center; gap:10px; background:white; border-radius:var(--r-lg); padding:12px; margin-bottom:10px; box-shadow:var(--shadow-card); }
+.fu-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.fua1 { background:linear-gradient(135deg,#FFE0D0,#FFCDB0); }
+.fua2 { background:linear-gradient(135deg,#D0F0EE,#B0E8E4); }
+.fua3 { background:linear-gradient(135deg,#D0E8FF,#B0D4FF); }
+.fu-info { flex:1; }
+.fu-name { font-size:13px; font-weight:600; color:var(--gray-800); }
+.fu-meta { font-size:11px; color:var(--gray-400); margin-top:2px; }
+.follow-action-btn { background:var(--grad-primary); color:white; border:none; padding:6px 14px; border-radius:var(--r-full); font-size:11px; font-weight:600; cursor:pointer; }
+.follow-action-btn.followed { background:var(--gray-100); color:var(--gray-500); box-shadow:none; }
+
+.footprint-item { display:flex; gap:10px; background:white; border-radius:var(--r-lg); padding:12px; margin-bottom:10px; box-shadow:var(--shadow-card); }
+.fp-icon { width:44px; height:44px; border-radius:var(--r-md); background:linear-gradient(135deg,#FFE0D0,#FFCDB0); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.fp-info { flex:1; }
+.fp-title { font-size:13px; font-weight:600; color:var(--gray-800); }
+.fp-meta { font-size:11px; color:var(--gray-400); margin-top:2px; }
+.fp-price { font-size:13px; font-weight:700; color:var(--primary); margin-top:3px; }
+
+/* ===== 登录页 ===== */
+.login-page { height:100%; background:var(--grad-header); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; min-height:432px; }
+.login-logo { text-align:center; margin-bottom:32px; }
+.login-logo .logo-icon { width:72px; height:72px; background:rgba(255,255,255,0.25); border-radius:24px; display:flex; align-items:center; justify-content:center; font-size:38px; margin:0 auto 12px; box-shadow:0 4px 20px rgba(0,0,0,0.15); }
+.login-logo h2 { color:white; font-size:22px; font-weight:800; }
+.login-logo p { color:rgba(255,255,255,0.8); font-size:13px; margin-top:6px; }
+.login-card { background:white; border-radius:var(--r-xl); padding:22px; width:100%; box-shadow:var(--shadow-md); }
+.login-card h3 { font-size:16px; font-weight:700; color:var(--gray-800); text-align:center; margin-bottom:16px; }
+.wechat-login-btn { width:100%; background:linear-gradient(135deg,#07C160,#06AD56); color:white; border:none; padding:14px; border-radius:var(--r-full); font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 16px rgba(7,193,96,0.35); }
+.wechat-login-btn span { font-size:20px; }
+.login-tip { font-size:10px; color:var(--gray-400); text-align:center; margin-top:12px; line-height:1.5; }
+
+/* ===== 设计说明区域 ===== */
+.spec-section { background:white; border-radius:var(--r-xl); padding:28px; margin-bottom:32px; box-shadow:var(--shadow-card); }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:16px; }
+.spec-item h4 { font-size:13px; font-weight:700; color:var(--gray-700); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.spec-list { list-style:none; }
+.spec-list li { font-size:12px; color:var(--gray-600); padding:4px 0; border-bottom:0.5px solid var(--gray-100); display:flex; align-items:flex-start; gap:6px; }
+.spec-list li::before { content:'✓'; color:var(--success); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+/* 响应式 */
+@media (max-width: 1200px) {
+  .phones-row { grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width: 860px) {
+  .phones-row { grid-template-columns:repeat(2,1fr); }
+  .ds-grid, .spec-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .phones-row { grid-template-columns:1fr; }
+  .ds-grid, .spec-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- 标题 -->
+  <div class="page-title">
+    <h1>🏠 家政小程序 · UI 设计方案</h1>
+    <p>家政服务撮合平台 · 微信小程序界面设计</p>
+    <div class="badge-row">
+      <span class="badge badge-orange">📱 移动端优先</span>
+      <span class="badge badge-teal">🎨 活泼温暖风格</span>
+      <span class="badge badge-purple">♿ WCAG AA 可访问性</span>
+    </div>
+  </div>
+
+  <!-- 设计系统 -->
+  <div class="ds-section">
+    <div class="section-heading">设计系统基础</div>
+    <div class="ds-grid">
+
+      <!-- 色彩 -->
+      <div class="ds-block">
+        <h4>🎨 色彩系统</h4>
+        <div class="color-swatches" style="margin-bottom:12px;">
+          <div class="swatch-wrap"><div class="swatch" style="background:#FF6B35;"></div><div class="swatch-name">主色<br>#FF6B35</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#FFB347;"></div><div class="swatch-name">主辅<br>#FFB347</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#2EC4B6;"></div><div class="swatch-name">强调<br>#2EC4B6</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:linear-gradient(135deg,#FF6B35,#FFB347);"></div><div class="swatch-name">主渐变</div></div>
+        </div>
+        <div class="color-swatches">
+          <div class="swatch-wrap"><div class="swatch" style="background:#4CAF50;"></div><div class="swatch-name">成功</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#FF9800;"></div><div class="swatch-name">警告</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#F44336;"></div><div class="swatch-name">错误</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#F5F5F5; border:1px solid #eee;"></div><div class="swatch-name">背景</div></div>
+        </div>
+      </div>
+
+      <!-- 字体 -->
+      <div class="ds-block">
+        <h4>✍️ 字体层级</h4>
+        <div class="type-scale">
+          <div class="t1">标题一 24px Bold</div>
+          <div class="t2">标题二 18px SemiBold</div>
+          <div class="t3">正文标题 15px Medium</div>
+          <div class="t4">辅助文本 13px Regular</div>
+          <div class="t5">说明/标签 11px Regular</div>
+        </div>
+      </div>
+
+      <!-- 组件 -->
+      <div class="ds-block">
+        <h4>🧱 基础组件</h4>
+        <div class="comp-row">
+          <button class="btn btn-primary">立即接单</button>
+          <button class="btn btn-outline">发布需求</button>
+        </div>
+        <div class="comp-row">
+          <button class="btn btn-teal btn-sm">联系TA</button>
+          <span class="chip chip-orange">招募中</span>
+          <span class="chip chip-green">已接单</span>
+          <span class="chip chip-yellow">待确认</span>
+        </div>
+        <div class="tag-row" style="margin-top:8px;">
+          <span class="chip chip-teal">保洁</span>
+          <span class="chip chip-orange">烹饪</span>
+          <span class="chip" style="background:#F0EEFF;color:#667eea;">搬运</span>
+          <span class="chip" style="background:#FFF0F0;color:#F44336;">急单</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页面标题 -->
+  <div class="section-heading" style="margin-bottom:20px;">📱 页面设计稿</div>
+
+  <!-- 五屏手机 -->
+  <div class="phones-row">
+
+    <!-- ======== 手机1: 登录页 ======== -->
+    <div class="phone-col">
+      <div class="phone-name">登录页</div>
+      <div class="phone-desc">微信一键授权登录</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="login-page">
+            <div class="login-logo">
+              <div class="logo-icon">🏠</div>
+              <h2>家政速帮</h2>
+              <p>身边的家政服务平台</p>
+            </div>
+            <div class="login-card">
+              <h3>欢迎使用</h3>
+              <button class="wechat-login-btn">
+                <span>💬</span> 微信一键登录
+              </button>
+              <div class="login-tip">
+                授权登录即表示您同意《用户协议》及《隐私政策》
+              </div>
+            </div>
+            <div style="color:rgba(255,255,255,0.6);font-size:10px;margin-top:24px;text-align:center;">
+              家政速帮 · 让生活更轻松
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== 手机2: 首页 ======== -->
+    <div class="phone-col">
+      <div class="phone-name">首页</div>
+      <div class="phone-desc">需求广场 · 浏览接单</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar on-orange" style="background:var(--grad-header);">
+            <span class="status-time">11:03</span>
+            <div style="display:flex;gap:3px;font-size:10px;">📶 🔋</div>
+          </div>
+          <!-- 头部 -->
+          <div class="home-header" style="padding-top:0;">
+            <div class="home-topbar">
+              <div class="home-loc">📍 <strong>北京市朝阳区</strong> ▾</div>
+              <div class="home-avatar">😊</div>
+            </div>
+            <div class="search-bar">
+              <span class="search-icon">🔍</span>
+              <span>搜索家政服务需求...</span>
+            </div>
+          </div>
+          <!-- 分类 -->
+          <div class="home-cats">
+            <div class="cat-item">
+              <div class="cat-icon-wrap c1">🧹</div>
+              <div class="cat-text">保洁</div>
+            </div>
+            <div class="cat-item">
+              <div class="cat-icon-wrap c2">🍳</div>
+              <div class="cat-text">烹饪</div>
+            </div>
+            <div class="cat-item">
+              <div class="cat-icon-wrap c3">👶</div>
+              <div class="cat-text">育儿</div>
+            </div>
+            <div class="cat-item">
+              <div class="cat-icon-wrap c4">🧓</div>
+              <div class="cat-text">老人</div>
+            </div>
+            <div class="cat-item">
+              <div class="cat-icon-wrap c5">📦</div>
+              <div class="cat-text">搬运</div>
+            </div>
+          </div>
+          <!-- 横幅 -->
+          <div class="banner">
+            <div class="banner-text">
+              <h3>附近有3条新需求</h3>
+              <p>快来抢单，收入翻倍！</p>
+            </div>
+            <div class="banner-btn">去接单</div>
+            <div class="banner-decor">🏠</div>
+          </div>
+          <!-- 需求列表 -->
+          <div class="section-bar">
+            <h3>附近需求 · 全部</h3>
+            <a>筛选 ▾</a>
+          </div>
+
+          <!-- 需求卡片1 -->
+          <div class="demand-card">
+            <div class="demand-card-top">
+              <div class="demand-user">
+                <div class="user-avatar ua1">👩</div>
+                <div class="user-info">
+                  <div class="uname">李**</div>
+                  <div class="utime">5分钟前 · 朝阳区</div>
+                </div>
+              </div>
+              <span class="demand-status ds-open">招募中</span>
+            </div>
+            <div class="demand-title">家庭日常保洁，约2-3小时</div>
+            <div class="demand-desc">120㎡三居室，需要打扫卫生、擦地板、清洁厨房卫生间，请有经验的阿姨。</div>
+            <div class="demand-meta">
+              <div class="meta-item">📍 距您0.8km</div>
+              <div class="meta-item">📅 明天上午</div>
+              <div class="meta-item">⏱ 2-3h</div>
+            </div>
+            <div class="demand-footer">
+              <div class="demand-price">¥80<span>/小时</span></div>
+              <button class="btn-take">立即接单</button>
+            </div>
+          </div>
+
+          <!-- 需求卡片2 -->
+          <div class="demand-card">
+            <div class="demand-card-top">
+              <div class="demand-user">
+                <div class="user-avatar ua2">👨</div>
+                <div class="user-info">
+                  <div class="uname">张**</div>
+                  <div class="utime">20分钟前 · 海淀区</div>
+                </div>
+              </div>
+              <span class="demand-status ds-open">招募中</span>
+            </div>
+            <div class="demand-title">月嫂/育儿嫂，住家优先</div>
+            <div class="demand-desc">新生儿护理，妈妈恢复期同住，有育婴师证书优先，长期稳定。</div>
+            <div class="demand-meta">
+              <div class="meta-item">📍 距您2.1km</div>
+              <div class="meta-item">📅 长期</div>
+              <div class="meta-item">⭐ 急</div>
+            </div>
+            <div class="demand-footer">
+              <div class="demand-price">¥8000<span>/月</span></div>
+              <button class="btn-take">立即接单</button>
+            </div>
+          </div>
+
+          <!-- 需求卡片3 -->
+          <div class="demand-card">
+            <div class="demand-card-top">
+              <div class="demand-user">
+                <div class="user-avatar ua3">👩‍🦳</div>
+                <div class="user-info">
+                  <div class="uname">王**</div>
+                  <div class="utime">1小时前 · 西城区</div>
+                </div>
+              </div>
+              <span class="demand-status ds-taken">已接单</span>
+            </div>
+            <div class="demand-title">老人日常照护，白班</div>
+            <div class="demand-desc">78岁老人，行动不便，需要每天陪护，协助洗漱、饮食，有护理经验者优先。</div>
+            <div class="demand-meta">
+              <div class="meta-item">📍 距您3.5km</div>
+              <div class="meta-item">📅 每天</div>
+              <div class="meta-item">⏱ 8h/天</div>
+            </div>
+            <div class="demand-footer">
+              <div class="demand-price">¥200<span>/天</span></div>
+              <button class="btn-take-sm">已接单</button>
+            </div>
+          </div>
+
+          <!-- 底部导航 -->
+          <div class="tab-bar">
+            <div class="tab-item active">
+              <div class="tab-icon">🏠</div>
+              <div class="tab-text" style="color:var(--primary);">首页</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">📋</div>
+              <div class="tab-text">需求</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon" style="background:var(--grad-primary);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:var(--shadow-primary);">➕</div>
+              <div class="tab-text">发布</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">💬</div>
+              <div class="tab-text">消息</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">👤</div>
+              <div class="tab-text">我的</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== 手机3: 需求详情 ======== -->
+    <div class="phone-col">
+      <div class="phone-name">需求详情</div>
+      <div class="phone-desc">查看详情 · 一键接单</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar on-dark" style="background:var(--grad-header);">
+            <span class="status-time">11:03</span>
+            <div>📶 🔋</div>
+          </div>
+          <div class="detail-header" style="padding-top:0;">
+            <div class="detail-nav">
+              <span>‹ 返回</span>
+              &nbsp;&nbsp;需求详情
+            </div>
+          </div>
+
+          <div style="background:white;border-radius:20px 20px 0 0;margin-top:-10px;padding:18px 14px 0;">
+            <div class="detail-badge-row">
+              <span class="chip chip-orange">保洁</span>
+              <span class="chip" style="background:#FFF8E1;color:#FF9800;">⭐ 急单</span>
+            </div>
+            <div class="detail-title">家庭日常保洁，约2-3小时，明天上午可上门</div>
+            <div class="detail-desc">
+              120㎡三居室，需要打扫卫生间、厨房油烟机、地板吸尘拖地。家中有宠物，请无过敏人士前来，自带工具优先。整体干净整洁，主要是卫生间和厨房需要重点清洁。
+            </div>
+            <div class="detail-meta-grid">
+              <div class="detail-meta-item">
+                <div class="dmi-label">📍 服务地址</div>
+                <div class="dmi-val">朝阳区建国路</div>
+              </div>
+              <div class="detail-meta-item">
+                <div class="dmi-label">📅 服务时间</div>
+                <div class="dmi-val">明天 09:00-12:00</div>
+              </div>
+              <div class="detail-meta-item">
+                <div class="dmi-label">⏱ 预计时长</div>
+                <div class="dmi-val">约 2-3 小时</div>
+              </div>
+              <div class="detail-meta-item">
+                <div class="dmi-label">🏠 房屋面积</div>
+                <div class="dmi-val">120 ㎡</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="poster-row">
+              <div class="poster-info">
+                <div class="poster-avatar">👩</div>
+                <div>
+                  <div class="poster-name">李美华</div>
+                  <div class="poster-rating">⭐⭐⭐⭐⭐ 4.9 · 发布12单</div>
+                </div>
+              </div>
+              <button class="follow-btn">+ 关注</button>
+            </div>
+            <div class="divider"></div>
+            <div style="font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">接单者评价</div>
+          </div>
+
+          <div class="comment-section" style="padding:0 14px 80px;background:white;">
+            <div class="comment-card">
+              <div class="comment-ava">👨</div>
+              <div class="comment-body">
+                <div class="comment-name">王师傅</div>
+                <div class="comment-text">雇主很好说话，房间很整洁，工作顺利完成，感谢！</div>
+                <div class="comment-time">2天前</div>
+              </div>
+            </div>
+            <div class="comment-card">
+              <div class="comment-ava">👩‍🦱</div>
+              <div class="comment-body">
+                <div class="comment-name">陈阿姨</div>
+                <div class="comment-text">准时付款，沟通顺畅，下次还愿意来。</div>
+                <div class="comment-time">1周前</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-bottom-bar">
+            <div class="price-display">
+              <div class="price">¥80<span style="font-size:13px;font-weight:500;color:var(--gray-400);">/时</span></div>
+              <div class="price-label">预计2-3h · 约¥160-240</div>
+            </div>
+            <button class="btn-chat">💬</button>
+            <button class="btn-large">立即接单</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== 手机4: 发布需求 ======== -->
+    <div class="phone-col">
+      <div class="phone-name">发布需求</div>
+      <div class="phone-desc">填写表单 · 一键发布</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar on-light">
+            <span class="status-time">11:03</span>
+            <div>📶 🔋</div>
+          </div>
+          <div class="publish-header">
+            <div class="back-btn">‹</div>
+            <h2>发布家政需求</h2>
+          </div>
+          <div class="publish-form">
+            <div class="form-section">
+              <h4>📌 服务类型</h4>
+              <div class="cat-select-grid">
+                <div class="cat-sel-item selected">
+                  <span class="cat-sel-icon">🧹</span>
+                  <span class="cat-sel-text">保洁</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">🍳</span>
+                  <span class="cat-sel-text">烹饪</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">👶</span>
+                  <span class="cat-sel-text">育儿</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">🧓</span>
+                  <span class="cat-sel-text">老人</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">📦</span>
+                  <span class="cat-sel-text">搬运</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">🐾</span>
+                  <span class="cat-sel-text">宠物</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">🔧</span>
+                  <span class="cat-sel-text">维修</span>
+                </div>
+                <div class="cat-sel-item">
+                  <span class="cat-sel-icon">➕</span>
+                  <span class="cat-sel-text">更多</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4>📝 需求描述</h4>
+              <div class="form-item">
+                <div class="form-label">标题 <span class="required">*</span></div>
+                <input class="form-input" type="text" placeholder="简要描述您的需求，如：保洁3小时" value="家庭日常保洁，约2-3小时">
+              </div>
+              <div class="form-item">
+                <div class="form-label">详细说明</div>
+                <textarea class="form-textarea" placeholder="描述具体要求、注意事项等...">120㎡三居室，需要打扫卫生间、厨房...</textarea>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4>💰 报酬设置</h4>
+              <div class="form-item">
+                <div class="form-label">预期报酬 <span class="required">*</span></div>
+                <div class="price-row">
+                  <span class="price-prefix">¥</span>
+                  <input class="price-input" type="number" value="80">
+                  <span class="price-unit">元/小时</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4>📅 时间地点</h4>
+              <div class="form-item">
+                <div class="form-label">服务时间</div>
+                <input class="form-input" type="text" value="明天 09:00 - 12:00">
+              </div>
+              <div class="form-item">
+                <div class="form-label">服务地址</div>
+                <input class="form-input" type="text" value="北京市朝阳区建国路88号">
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4>📷 上传图片（选填）</h4>
+              <div class="photo-upload">
+                <div class="photo-thumb">🏠</div>
+                <div class="photo-thumb">🛁</div>
+                <div class="photo-add">
+                  <span>📷</span>
+                  <p>添加</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="publish-btn-wrap">
+            <button class="publish-btn">🚀 立即发布需求</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== 手机5: 我的页面 ======== -->
+    <div class="phone-col">
+      <div class="phone-name">我的</div>
+      <div class="phone-desc">订单管理 · 足迹关注</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar on-dark" style="background:var(--grad-header);">
+            <span class="status-time">11:03</span>
+            <div>📶 🔋</div>
+          </div>
+          <!-- 用户信息头 -->
+          <div class="mine-header" style="padding-top:0;">
+            <div class="mine-user-row">
+              <div class="mine-avatar">😊</div>
+              <div class="mine-info">
+                <h2>张小华</h2>
+                <p>家政速帮用户 · 已认证</p>
+              </div>
+              <button class="mine-edit-btn">编辑</button>
+            </div>
+            <div class="mine-stats">
+              <div class="stat-item">
+                <div class="stat-num">12</div>
+                <div class="stat-label">发布需求</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">8</div>
+                <div class="stat-label">接单记录</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">34</div>
+                <div class="stat-label">关注</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">56</div>
+                <div class="stat-label">足迹</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mine-body">
+            <!-- 我发布的需求 -->
+            <div class="mine-card">
+              <div class="mine-card-header">
+                <h3>📋 我发布的需求</h3>
+                <a>查看全部</a>
+              </div>
+              <div class="order-item">
+                <div class="order-icon oi1">🧹</div>
+                <div class="order-detail">
+                  <div class="order-title">家庭日常保洁</div>
+                  <div class="order-sub">王师傅 接单 · 明天09:00</div>
+                </div>
+                <div class="order-right">
+                  <div class="order-price">¥80/h</div>
+                  <div class="order-status os-active">进行中</div>
+                </div>
+              </div>
+              <div class="order-item">
+                <div class="order-icon oi2">🍳</div>
+                <div class="order-detail">
+                  <div class="order-title">家庭烹饪 4小时</div>
+                  <div class="order-sub">尚未有人接单</div>
+                </div>
+                <div class="order-right">
+                  <div class="order-price">¥100/h</div>
+                  <div class="order-status os-pending">待接单</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 我接的单 -->
+            <div class="mine-card">
+              <div class="mine-card-header">
+                <h3>🤝 我接的单</h3>
+                <a>查看全部</a>
+              </div>
+              <div class="order-item">
+                <div class="order-icon oi3">🧓</div>
+                <div class="order-detail">
+                  <div class="order-title">老人日常照护</div>
+                  <div class="order-sub">张阿姨 发布 · 已完成</div>
+                </div>
+                <div class="order-right">
+                  <div class="order-price">¥200</div>
+                  <div class="order-status os-done">已完成</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 功能菜单 -->
+            <div class="mine-card">
+              <div class="menu-item">
+                <div class="menu-icon-wrap mi1">👣</div>
+                <div class="menu-label">我的足迹</div>
+                <div class="menu-arrow">›</div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-icon-wrap mi2">❤️</div>
+                <div class="menu-label">我的关注</div>
+                <div class="menu-arrow">›</div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-icon-wrap mi3">⭐</div>
+                <div class="menu-label">我的评价</div>
+                <div class="menu-arrow">›</div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-icon-wrap mi4">🔔</div>
+                <div class="menu-label">消息通知</div>
+                <div class="menu-arrow">›</div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-icon-wrap mi5">⚙️</div>
+                <div class="menu-label">设置</div>
+                <div class="menu-arrow">›</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-bar">
+            <div class="tab-item">
+              <div class="tab-icon">🏠</div>
+              <div class="tab-text">首页</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">📋</div>
+              <div class="tab-text">需求</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon" style="background:var(--grad-primary);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:var(--shadow-primary);">➕</div>
+              <div class="tab-text">发布</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">💬</div>
+              <div class="tab-text">消息</div>
+            </div>
+            <div class="tab-item active">
+              <div class="tab-icon">👤</div>
+              <div class="tab-text" style="color:var(--primary);">我的</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phones-row -->
+
+  <!-- 足迹/关注附加展示 -->
+  <div class="section-heading" style="margin-bottom:20px;">📌 子页面展示</div>
+  <div class="phones-row" style="grid-template-columns:repeat(2,1fr);max-width:480px;">
+
+    <!-- 足迹页 -->
+    <div class="phone-col">
+      <div class="phone-name">我的足迹</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar on-light">
+            <span class="status-time">11:03</span>
+            <div>📶 🔋</div>
+          </div>
+          <div class="follow-header">
+            <div class="follow-nav-row">
+              <div class="back-btn">‹</div>
+              <h2>足迹 / 关注</h2>
+            </div>
+            <div class="follow-tabs">
+              <div class="ftab active">我的足迹</div>
+              <div class="ftab">我的关注</div>
+            </div>
+          </div>
+          <div class="follow-body">
+            <div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;">今天</div>
+            <div class="footprint-item">
+              <div class="fp-icon">🧹</div>
+              <div class="fp-info">
+                <div class="fp-title">家庭日常保洁，约2-3小时</div>
+                <div class="fp-meta">📍 朝阳区 · 11分钟前</div>
+                <div class="fp-price">¥80/时</div>
+              </div>
+            </div>
+            <div class="footprint-item">
+              <div class="fp-icon">👶</div>
+              <div class="fp-info">
+                <div class="fp-title">月嫂育儿嫂，住家</div>
+                <div class="fp-meta">📍 海淀区 · 38分钟前</div>
+                <div class="fp-price">¥8000/月</div>
+              </div>
+            </div>
+            <div style="font-size:11px;color:var(--gray-400);margin:12px 0 8px;">昨天</div>
+            <div class="footprint-item">
+              <div class="fp-icon">🍳</div>
+              <div class="fp-info">
+                <div class="fp-title">家庭私厨，每周3次</div>
+                <div class="fp-meta">📍 西城区 · 昨天17:30</div>
+                <div class="fp-price">¥120/次</div>
+              </div>
+            </div>
+            <div class="footprint-item">
+              <div class="fp-icon">🧓</div>
+              <div class="fp-info">
+                <div class="fp-title">老人日间照护，白班</div>
+                <div class="fp-meta">📍 东城区 · 昨天14:20</div>
+                <div class="fp-price">¥200/天</div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-bar">
+            <div class="tab-item"><div class="tab-icon">🏠</div><div class="tab-text">首页</div></div>
+            <div class="tab-item"><div class="tab-icon">📋</div><div class="tab-text">需求</div></div>
+            <div class="tab-item"><div class="tab-icon" style="background:var(--grad-primary);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-top:-18px;">➕</div><div class="tab-text">发布</div></div>
+            <div class="tab-item"><div class="tab-icon">💬</div><div class="tab-text">消息</div></div>
+            <div class="tab-item active"><div class="tab-icon">👤</div><div class="tab-text" style="color:var(--primary);">我的</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 关注页 -->
+    <div class="phone-col">
+      <div class="phone-name">我的关注</div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status-bar on-light">
+            <span class="status-time">11:03</span>
+            <div>📶 🔋</div>
+          </div>
+          <div class="follow-header">
+            <div class="follow-nav-row">
+              <div class="back-btn">‹</div>
+              <h2>足迹 / 关注</h2>
+            </div>
+            <div class="follow-tabs">
+              <div class="ftab">我的足迹</div>
+              <div class="ftab active">我的关注</div>
+            </div>
+          </div>
+          <div class="follow-body">
+            <div class="follow-user-item">
+              <div class="fu-avatar fua1">👩‍🍳</div>
+              <div class="fu-info">
+                <div class="fu-name">陈大厨</div>
+                <div class="fu-meta">家庭私厨 · 接单18次 ⭐4.9</div>
+              </div>
+              <button class="follow-action-btn followed">已关注</button>
+            </div>
+            <div class="follow-user-item">
+              <div class="fu-avatar fua2">👨‍⚕️</div>
+              <div class="fu-info">
+                <div class="fu-name">李护工</div>
+                <div class="fu-meta">老人照护 · 接单32次 ⭐5.0</div>
+              </div>
+              <button class="follow-action-btn followed">已关注</button>
+            </div>
+            <div class="follow-user-item">
+              <div class="fu-avatar fua3">🧹</div>
+              <div class="fu-info">
+                <div class="fu-name">刘阿姨保洁</div>
+                <div class="fu-meta">专业保洁 · 接单45次 ⭐4.8</div>
+              </div>
+              <button class="follow-action-btn">+ 关注</button>
+            </div>
+            <div class="follow-user-item">
+              <div class="fu-avatar" style="background:linear-gradient(135deg,#F0D0FF,#E0B0FF);">👶</div>
+              <div class="fu-info">
+                <div class="fu-name">小王月嫂</div>
+                <div class="fu-meta">月嫂育儿 · 接单9次 ⭐4.7</div>
+              </div>
+              <button class="follow-action-btn followed">已关注</button>
+            </div>
+          </div>
+          <div class="tab-bar">
+            <div class="tab-item"><div class="tab-icon">🏠</div><div class="tab-text">首页</div></div>
+            <div class="tab-item"><div class="tab-icon">📋</div><div class="tab-text">需求</div></div>
+            <div class="tab-item"><div class="tab-icon" style="background:var(--grad-primary);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-top:-18px;">➕</div><div class="tab-text">发布</div></div>
+            <div class="tab-item"><div class="tab-icon">💬</div><div class="tab-text">消息</div></div>
+            <div class="tab-item active"><div class="tab-icon">👤</div><div class="tab-text" style="color:var(--primary);">我的</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 设计说明 -->
+  <div class="spec-section">
+    <div class="section-heading">📐 设计规格说明</div>
+    <div class="spec-grid">
+      <div class="spec-item">
+        <h4>🎨 视觉风格</h4>
+        <ul class="spec-list">
+          <li>主色 #FF6B35 温暖橙，传递活力与信任</li>
+          <li>辅色 #2EC4B6 清爽青绿，差异化强调</li>
+          <li>渐变 橙→琥珀，活泼不失稳重</li>
+          <li>圆角体系 8/12/16/20px，友好柔和</li>
+          <li>卡片阴影 低对比度，层级清晰</li>
+          <li>字体系统 PingFang SC，清晰可读</li>
+        </ul>
+      </div>
+      <div class="spec-item">
+        <h4>📱 交互设计</h4>
+        <ul class="spec-list">
+          <li>底部Tab 5项，中间凸起发布按钮</li>
+          <li>首页搜索置顶，快捷分类横滑</li>
+          <li>需求卡片信息层级明确：标题→描述→元信息→价格/接单</li>
+          <li>详情页黏性底栏，随时接单</li>
+          <li>发布流程分区块，逐步引导</li>
+          <li>接单/已接单 状态色彩区分</li>
+        </ul>
+      </div>
+      <div class="spec-item">
+        <h4>♿ 可访问性</h4>
+        <ul class="spec-list">
+          <li>主文本对比度 ≥ 7:1 (WCAG AAA)</li>
+          <li>辅助文本对比度 ≥ 4.5:1 (AA)</li>
+          <li>最小点击目标 44×44px</li>
+          <li>状态信息用色彩+文字双重传达</li>
+          <li>表单项含清晰 label 和 placeholder</li>
+          <li>价格金额加单位说明避免歧义</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:24px 0;color:var(--gray-400);font-size:12px;">
+    🎨 家政速帮 · UI设计方案 v1.0 &nbsp;|&nbsp; 设计师：UI设计师 Agent &nbsp;|&nbsp; 2026.03.26
+  </div>
+
+</div>
+</body>
+</html>

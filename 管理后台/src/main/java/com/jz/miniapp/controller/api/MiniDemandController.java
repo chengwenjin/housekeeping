@@ -51,6 +51,11 @@ public class MiniDemandController {
         log.info("获取需求列表 - page: {}, pageSize: {}, categoryId: {}, city: {}", 
                 page, pageSize, categoryId, city);
         
+        // 小程序C端默认只查询招募中的需求（status=1）
+        if (status == null) {
+            status = 1;
+        }
+        
         Page<Demand> demandPage = demandService.getDemands(page, pageSize, categoryId, city, district, status, keyword);
         
         // 转换为 VO

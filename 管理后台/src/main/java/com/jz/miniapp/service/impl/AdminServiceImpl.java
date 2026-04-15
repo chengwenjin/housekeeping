@@ -22,14 +22,21 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Override
     public Admin login(String username, String password) {
-        // 如果是 admin 用户，生成密码并打印到日志
-        if ("admin".equals(username)) {
-            String tempHash = BCrypt.hashpw(password);
-            log.info("=== 临时密码哈希 (admin123): {} ===", tempHash);
-        }
-        
         // 查询管理员
         Admin admin = getByUsername(username);
+        
+        // 如果是 admin 用户且不存在，自动创建默认管理员
+        if ("admin".equals(username) && admin == null) {
+            log.info("=== 自动创建默认管理员账号 ===");
+            admin = new Admin();
+            admin.setUsername("admin");
+            admin.setPassword(BCrypt.hashpw("admin123"));
+            admin.setRealName("系统管理员");
+            admin.setStatus(1);
+            save(admin);
+            log.info("=== 默认管理员账号创建成功，用户名: admin, 密码: admin123 ===");
+        }
+        
         if (admin == null) {
             throw new BusinessException("用户名或密码错误");
         }

@@ -26,33 +26,23 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "static/tabs/home.png",
-        "selectedIconPath": "static/tabs/home-active.png"
+        "text": "首页"
       },
       {
         "pagePath": "pages/orders/orders",
-        "text": "需求",
-        "iconPath": "static/tabs/demand.png",
-        "selectedIconPath": "static/tabs/demand-active.png"
+        "text": "需求"
       },
       {
         "pagePath": "pages/publish/publish",
-        "text": "发布",
-        "iconPath": "static/tabs/publish.png",
-        "selectedIconPath": "static/tabs/publish-active.png"
+        "text": "发布"
       },
       {
         "pagePath": "pages/messages/messages",
-        "text": "消息",
-        "iconPath": "static/tabs/message.png",
-        "selectedIconPath": "static/tabs/message-active.png"
+        "text": "消息"
       },
       {
         "pagePath": "pages/mine/mine",
-        "text": "我的",
-        "iconPath": "static/tabs/mine.png",
-        "selectedIconPath": "static/tabs/mine-active.png"
+        "text": "我的"
       }
     ]
   },

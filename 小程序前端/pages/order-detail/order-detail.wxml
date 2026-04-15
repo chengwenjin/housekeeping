@@ -1,0 +1,109 @@
+<view class="order-detail-page">
+  <view class="order-header">
+    <view class="order-nav" bindtap="goBack">
+      <text class="back-icon">‹</text>
+      <text class="nav-title">订单详情</text>
+    </view>
+  </view>
+  
+  <view class="status-section">
+    <view class="status-icon">
+      <text>{{getStatusIcon(order.status)}}</text>
+    </view>
+    <text class="status-text">{{getStatusText(order.status)}}</text>
+    <text class="status-desc">{{getStatusDesc(order.status)}}</text>
+  </view>
+  
+  <view class="info-section">
+    <view class="section-title">
+      <text>📋 需求信息</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">需求标题</text>
+      <text class="info-value">{{order.demand.title || '加载中...'}}</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">需求描述</text>
+      <text class="info-value">{{order.demand.description || '暂无描述'}}</text>
+    </view>
+  </view>
+  
+  <view class="info-section">
+    <view class="section-title">
+      <text>💰 费用信息</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">预期价格</text>
+      <text class="info-value price">¥{{order.actualPrice || order.demand.expectedPrice || 0}}/{{order.priceUnit || order.demand.priceUnit || '小时'}}</text>
+    </view>
+  </view>
+  
+  <view class="info-section">
+    <view class="section-title">
+      <text>📍 服务信息</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">服务时间</text>
+      <text class="info-value">{{order.serviceTime ? formatTime(order.serviceTime) : '待定'}}</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">服务地址</text>
+      <text class="info-value">{{order.location.district || ''}} {{order.location.address || '暂无'}}</text>
+    </view>
+  </view>
+  
+  <view class="info-section">
+    <view class="section-title">
+      <text>👥 双方信息</text>
+    </view>
+    <view class="user-card" wx:if="{{order.publisher}}">
+      <view class="user-avatar">
+        <text>{{getAvatarEmoji(order.publisher.id)}}</text>
+      </view>
+      <view class="user-info">
+        <text class="user-name">{{order.publisher.nickname || '用户'}}</text>
+        <text class="user-role">发布者</text>
+      </view>
+    </view>
+    <view class="user-card" wx:if="{{order.taker}}">
+      <view class="user-avatar">
+        <text>{{getAvatarEmoji(order.taker.id)}}</text>
+      </view>
+      <view class="user-info">
+        <text class="user-name">{{order.taker.nickname || '用户'}}</text>
+        <text class="user-role">接单者</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="bottom-actions safe-area-bottom">
+    <button 
+      wx:if="{{order.status === 1 && isTaker}}"
+      class="action-btn primary"
+      bindtap="startService"
+    >
+      <text>开始服务</text>
+    </button>
+    <button 
+      wx:if="{{order.status === 2 && isTaker}}"
+      class="action-btn primary"
+      bindtap="completeService"
+    >
+      <text>确认完成</text>
+    </button>
+    <button 
+      wx:if="{{order.status === 3 && isPublisher}}"
+      class="action-btn primary"
+      bindtap="confirmComplete"
+    >
+      <text>确认完成</text>
+    </button>
+    <button 
+      wx:if="{{order.status === 1 || order.status === 2}}"
+      class="action-btn outline"
+      bindtap="cancelOrder"
+    >
+      <text>取消订单</text>
+    </button>
+  </view>
+</view>

@@ -1,0 +1,102 @@
+<view class="orders-page">
+  <view class="orders-header">
+    <text class="header-title">订单列表</text>
+  </view>
+  
+  <view class="order-tabs">
+    <view 
+      class="tab-item {{orderType === 'published' ? 'active' : ''}}"
+      bindtap="switchOrderType"
+      data-type="published"
+    >
+      <text>我发布的</text>
+    </view>
+    <view 
+      class="tab-item {{orderType === 'taken' ? 'active' : ''}}"
+      bindtap="switchOrderType"
+      data-type="taken"
+    >
+      <text>我接的单</text>
+    </view>
+  </view>
+  
+  <view class="status-tabs">
+    <view 
+      wx:for="{{statusOptions}}" 
+      wx:key="value"
+      class="status-item {{currentStatus === item.value ? 'active' : ''}}"
+      bindtap="selectStatus"
+      data-status="{{item.value}}"
+    >
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+  
+  <scroll-view 
+    class="orders-list" 
+    scroll-y
+    bindscrolltolower="loadMore"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+  >
+    <view 
+      wx:for="{{orderList}}" 
+      wx:key="id" 
+      class="order-card"
+      bindtap="goToOrderDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="order-card-header">
+        <view class="order-info">
+          <view class="order-icon oi{{(item.demand.category.id % 3) + 1}}">
+            <text>{{getCategoryIcon(item.demand.category.id)}}</text>
+          </view>
+          <view class="order-basic">
+            <text class="order-title">{{item.demand.title || '需求'}}</text>
+            <text class="order-no">订单号: {{item.orderNo}}</text>
+          </view>
+        </view>
+        <view class="order-status-badge {{getStatusBadgeClass(item.status)}}">
+          <text>{{getStatusText(item.status)}}</text>
+        </view>
+      </view>
+      
+      <view class="order-card-body">
+        <view class="order-meta-row" wx:if="{{orderType === 'published' && item.taker}}">
+          <text class="meta-label">接单者:</text>
+          <text class="meta-value">{{item.taker.nickname || '用户'}}</text>
+        </view>
+        <view class="order-meta-row" wx:elif="{{orderType === 'taken' && item.publisher}}">
+          <text class="meta-label">发布者:</text>
+          <text class="meta-value">{{item.publisher.nickname || '用户'}}</text>
+        </view>
+        
+        <view class="order-meta-row" wx:if="{{item.serviceTime}}">
+          <text class="meta-label">服务时间:</text>
+          <text class="meta-value">{{formatTime(item.serviceTime)}}</text>
+        </view>
+        
+        <view class="order-meta-row" wx:if="{{item.location.address}}">
+          <text class="meta-label">服务地址:</text>
+          <text class="meta-value">{{item.location.district}} {{item.location.address}}</text>
+        </view>
+      </view>
+      
+      <view class="order-card-footer">
+        <view class="order-price">
+          <text class="price-num">¥{{item.actualPrice || item.demand.expectedPrice || 0}}</text>
+          <text class="price-unit">/{{item.priceUnit || item.demand.priceUnit || '小时'}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view wx:if="{{!loading && orderList.length === 0}}" class="empty-text">
+      <text>暂无订单</text>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading-text">
+      <text>加载中...</text>
+    </view>
+  </scroll-view>
+</view>

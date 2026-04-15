@@ -1,0 +1,74 @@
+<view class="messages-page">
+  <view class="messages-header">
+    <text class="header-title">消息通知</text>
+    <view class="header-action" wx:if="{{unreadCount > 0}}" bindtap="markAllRead">
+      <text>一键已读</text>
+    </view>
+  </view>
+  
+  <view class="message-tabs">
+    <view 
+      class="tab-item {{activeTab === 'all' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="all"
+    >
+      <text>全部</text>
+      <view wx:if="{{unreadCount > 0}}" class="tab-badge">{{unreadCount}}</view>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'system' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="system"
+    >
+      <text>系统</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'order' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="order"
+    >
+      <text>订单</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'review' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="review"
+    >
+      <text>评价</text>
+    </view>
+  </view>
+  
+  <scroll-view 
+    class="messages-list" 
+    scroll-y
+    bindscrolltolower="loadMore"
+  >
+    <view 
+      wx:for="{{messageList}}" 
+      wx:key="id" 
+      class="message-item {{!item.isRead ? 'unread' : ''}}"
+      bindtap="handleMessageClick"
+      data-msg="{{item}}"
+    >
+      <view class="message-icon">
+        <text>{{getMessageIcon(item.type)}}</text>
+      </view>
+      <view class="message-content">
+        <view class="message-header">
+          <text class="message-title">{{item.title}}</text>
+          <text class="message-time">{{formatTime(item.createdAt)}}</text>
+        </view>
+        <text class="message-desc">{{item.content}}</text>
+      </view>
+      <view wx:if="{{!item.isRead}}" class="unread-dot"></view>
+    </view>
+    
+    <view wx:if="{{!loading && messageList.length === 0}}" class="empty-text">
+      <text>暂无消息</text>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading-text">
+      <text>加载中...</text>
+    </view>
+  </scroll-view>
+</view>

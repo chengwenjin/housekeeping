@@ -1,0 +1,90 @@
+<view class="follow-page">
+  <view class="follow-header">
+    <view class="follow-nav-row">
+      <view class="back-btn" bindtap="goBack">
+        <text>‹</text>
+      </view>
+      <text class="header-title">足迹 / 关注</text>
+    </view>
+    <view class="follow-tabs">
+      <view 
+        class="ftab {{activeTab === 'footprint' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="footprint"
+      >
+        <text>我的足迹</text>
+      </view>
+      <view 
+        class="ftab {{activeTab === 'following' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="following"
+      >
+        <text>我的关注</text>
+      </view>
+    </view>
+  </view>
+  
+  <scroll-view 
+    class="follow-body" 
+    scroll-y
+    bindscrolltolower="loadMore"
+  >
+    <view wx:if="{{activeTab === 'footprint'}}">
+      <view 
+        wx:for="{{footprintList}}" 
+        wx:key="id" 
+        class="footprint-item"
+        bindtap="goToDemand"
+        data-id="{{item.id}}"
+      >
+        <view class="fp-icon">
+          <text>{{getCategoryIcon(item.category.id)}}</text>
+        </view>
+        <view class="fp-info">
+          <text class="fp-title">{{item.title}}</text>
+          <text class="fp-meta">
+            📍 {{item.location.district || ''}} · {{item.browsedAtText || ''}}
+          </text>
+          <text class="fp-price">¥{{item.expectedPrice || 0}}/{{item.priceUnit || '时'}}</text>
+        </view>
+      </view>
+      
+      <view wx:if="{{!loading && footprintList.length === 0}}" class="empty-text">
+        <text>暂无足迹记录</text>
+      </view>
+    </view>
+    
+    <view wx:if="{{activeTab === 'following'}}">
+      <view 
+        wx:for="{{followingList}}" 
+        wx:key="id" 
+        class="follow-user-item"
+      >
+        <view class="fu-avatar fua1" bindtap="goToUserProfile" data-id="{{item.id}}">
+          <text>{{getAvatarEmoji(item.id)}}</text>
+        </view>
+        <view class="fu-info" bindtap="goToUserProfile" data-id="{{item.id}}">
+          <text class="fu-name">{{item.nickname || '用户'}}</text>
+          <text class="fu-meta">
+            {{item.bio || '暂无简介'}} · 接单{{item.totalOrders || 0}}次 ⭐{{item.score || 5.0}}
+          </text>
+        </view>
+        <button 
+          class="follow-action-btn {{item.isFollowed ? 'followed' : ''}}"
+          catchtap="toggleFollow"
+          data-user="{{item}}"
+        >
+          <text>{{item.isFollowed ? '已关注' : '+ 关注'}}</text>
+        </button>
+      </view>
+      
+      <view wx:if="{{!loading && followingList.length === 0}}" class="empty-text">
+        <text>暂无关注的用户</text>
+      </view>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading-text">
+      <text>加载中...</text>
+    </view>
+  </scroll-view>
+</view>

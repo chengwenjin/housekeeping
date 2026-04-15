@@ -1,0 +1,68 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/demand/detail",
+    "pages/publish/publish",
+    "pages/mine/mine",
+    "pages/follow/follow",
+    "pages/messages/messages",
+    "pages/orders/orders",
+    "pages/order-detail/order-detail",
+    "pages/user-profile/user-profile"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "家政速帮",
+    "navigationBarBackgroundColor": "#FF6B35",
+    "backgroundColor": "#F0F2F5",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#9E9E9E",
+    "selectedColor": "#FF6B35",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/orders/orders",
+        "text": "需求",
+        "iconPath": "static/tabs/demand.png",
+        "selectedIconPath": "static/tabs/demand-active.png"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布",
+        "iconPath": "static/tabs/publish.png",
+        "selectedIconPath": "static/tabs/publish-active.png"
+      },
+      {
+        "pagePath": "pages/messages/messages",
+        "text": "消息",
+        "iconPath": "static/tabs/message.png",
+        "selectedIconPath": "static/tabs/message-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "static/tabs/mine.png",
+        "selectedIconPath": "static/tabs/mine-active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于匹配附近的家政服务需求"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ],
+  "usingComponents": {}
+}

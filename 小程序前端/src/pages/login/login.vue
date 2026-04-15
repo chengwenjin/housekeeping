@@ -40,7 +40,7 @@ const handleLogin = async () => {
     uni.login({
       provider: 'weixin',
       success: async (loginRes) => {
-        console.log('登录code, loginRes.code
+        console.log('登录code:', loginRes.code)
         
         try {
           const mockUserInfo = {

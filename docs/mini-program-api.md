@@ -1,14 +1,16 @@
-﻿# 家政小程序 - API 接口设计文档 (小程序端)
+# 家政小程序 - API 接口设计文档 (小程序端)
 
 ## 1. 接口设计规范
 
 ### 1.1 基础信息
-- **协议**: HTTPS
-- **数据格式**: JSON
-- **字符编码**: UTF-8
-- **认证方式**: JWT Token (Bearer Auth)
+
+- 协议  : HTTPS
+- 数据格式  : JSON
+- 字符编码  : UTF-8
+- 认证方式  : JWT Token (Bearer Auth)
 
 ### 1.2 请求头 (Headers)
+
 ```
 Content-Type: application/json
 Authorization: Bearer <token>  (需要认证的接口)
@@ -17,7 +19,10 @@ X-Requested-With: XMLHttpRequest
 
 ### 1.3 统一响应格式
 
-**成功响应**:
+成功响应
+
+:
+
 ```json
 {
   "code": 200,
@@ -27,7 +32,10 @@ X-Requested-With: XMLHttpRequest
 }
 ```
 
-**错误响应**:
+错误响应
+
+:
+
 ```json
 {
   "code": 40001,
@@ -38,6 +46,7 @@ X-Requested-With: XMLHttpRequest
 ```
 
 ### 1.4 分页响应格式
+
 ```json
 {
   "code": 200,
@@ -57,32 +66,39 @@ X-Requested-With: XMLHttpRequest
 
 ### 1.5 错误码定义
 
-| 错误码 | 说明 |
-|--------|------|
-| 200 | 成功 |
-| 400 | 请求参数错误 |
-| 401 | 未登录/Token 失效 |
-| 403 | 无权限 |
-| 404 | 资源不存在 |
-| 500 | 服务器内部错误 |
-| 10001 | 微信登录失败 |
-| 10002 | Token 无效 |
-| 10003 | Token 已过期 |
-| 20001 | 需求不存在 |
-| 20002 | 需求已被接单 |
-| 20003 | 不能接自己的单 |
-| 30001 | 订单不存在 |
-| 30002 | 订单状态异常 |
+| 错误码   | 说明           |
+| ----- | ------------ |
+| 200   | 成功           |
+| 400   | 请求参数错误       |
+| 401   | 未登录/Token 失效 |
+| 403   | 无权限          |
+| 404   | 资源不存在        |
+| 500   | 服务器内部错误      |
+| 10001 | 微信登录失败       |
+| 10002 | Token 无效     |
+| 10003 | Token 已过期    |
+| 20001 | 需求不存在        |
+| 20002 | 需求已被接单       |
+| 20003 | 不能接自己的单      |
+| 30001 | 订单不存在        |
+| 30002 | 订单状态异常       |
 
 ## 2. 认证接口
 
 ### 2.1 微信登录
 
-**接口**: `POST /api/mini/auth/login`
+接口
 
-**描述**: 微信小程序授权登录
+: `POST /api/mini/auth/login`
 
-**请求参数**:
+描述
+
+: 微信小程序授权登录
+
+请求参数
+
+:
+
 ```json
 {
   "code": "wx_code_string",
@@ -96,7 +112,10 @@ X-Requested-With: XMLHttpRequest
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -122,25 +141,38 @@ X-Requested-With: XMLHttpRequest
 }
 ```
 
-**备注**: 
+备注
+
+:
+
 - code 通过 `wx.login()` 获取
 - 首次登录自动创建用户
 - token 有效期 7 天
 
 ### 2.2 刷新 Token
 
-**接口**: `POST /api/mini/auth/refresh`
+接口
 
-**描述**: 使用 refresh token 刷新 access token
+: `POST /api/mini/auth/refresh`
 
-**请求参数**:
+描述
+
+: 使用 refresh token 刷新 access token
+
+请求参数
+
+:
+
 ```json
 {
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -155,11 +187,18 @@ X-Requested-With: XMLHttpRequest
 
 ### 2.3 绑定手机号
 
-**接口**: `POST /api/mini/user/bind-phone`
+接口
 
-**描述**: 绑定用户手机号
+: `POST /api/mini/user/bind-phone`
 
-**请求参数**:
+描述
+
+: 绑定用户手机号
+
+请求参数
+
+:
+
 ```json
 {
   "code": "wx_code_string",
@@ -168,7 +207,10 @@ X-Requested-With: XMLHttpRequest
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -183,11 +225,18 @@ X-Requested-With: XMLHttpRequest
 
 ### 3.1 获取需求列表
 
-**接口**: `GET /api/mini/demands`
+接口
 
-**描述**: 获取需求列表 (支持筛选、分页)
+: `GET /api/mini/demands`
 
-**请求参数**:
+描述
+
+: 获取需求列表 (支持筛选、分页)
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1 (页码，默认 1)
@@ -200,7 +249,10 @@ Query Parameters:
 - keyword: 关键词 (可选)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -252,16 +304,26 @@ Query Parameters:
 
 ### 3.2 获取需求详情
 
-**接口**: `GET /api/mini/demands/:id`
+接口
 
-**描述**: 获取需求详细信息
+: `GET /api/mini/demands/:id`
 
-**路径参数**:
+描述
+
+: 获取需求详细信息
+
+路径参数
+
+:
+
 ```
 id: 1001 (需求 ID)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -333,11 +395,18 @@ id: 1001 (需求 ID)
 
 ### 3.3 发布需求
 
-**接口**: `POST /api/mini/demands`
+接口
 
-**描述**: 发布新的家政需求
+: `POST /api/mini/demands`
 
-**请求参数**:
+描述
+
+: 发布新的家政需求
+
+请求参数
+
+:
+
 ```json
 {
   "categoryId": 1,
@@ -362,7 +431,10 @@ id: 1001 (需求 ID)
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -379,16 +451,26 @@ id: 1001 (需求 ID)
 
 ### 3.4 更新需求
 
-**接口**: `PUT /api/mini/demands/:id`
+接口
 
-**描述**: 更新需求信息 (仅发布者)
+: `PUT /api/mini/demands/:id`
 
-**路径参数**:
+描述
+
+: 更新需求信息 (仅发布者)
+
+路径参数
+
+:
+
 ```
 id: 1001
 ```
 
-**请求参数**: (同发布需求，所有字段可选)
+请求参数
+
+: (同发布需求，所有字段可选)
+
 ```json
 {
   "title": " updated title",
@@ -396,7 +478,10 @@ id: 1001
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -410,16 +495,26 @@ id: 1001
 
 ### 3.5 删除需求
 
-**接口**: `DELETE /api/mini/demands/:id`
+接口
 
-**描述**: 删除需求 (软删除，仅发布者)
+: `DELETE /api/mini/demands/:id`
 
-**路径参数**:
+描述
+
+: 删除需求 (软删除，仅发布者)
+
+路径参数
+
+:
+
 ```
 id: 1001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -430,16 +525,26 @@ id: 1001
 
 ### 3.6 添加足迹
 
-**接口**: `POST /api/mini/demands/:id/footprint`
+接口
 
-**描述**: 记录用户浏览需求 (自动调用)
+: `POST /api/mini/demands/:id/footprint`
 
-**路径参数**:
+描述
+
+: 记录用户浏览需求 (自动调用)
+
+路径参数
+
+:
+
 ```
 id: 1001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -452,23 +557,36 @@ id: 1001
 
 ### 4.1 接单
 
-**接口**: `POST /api/mini/orders/:demandId/take`
+接口
 
-**描述**: 接取需求
+: `POST /api/mini/orders/:demandId/take`
 
-**路径参数**:
+描述
+
+: 接取需求
+
+路径参数
+
+:
+
 ```
 demandId: 1001
 ```
 
-**请求参数**:
+请求参数
+
+:
+
 ```json
 {
   "remark": "我可以接单，请及时联系"
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -485,11 +603,18 @@ demandId: 1001
 
 ### 4.2 获取我发布的订单
 
-**接口**: `GET /api/mini/orders/published`
+接口
 
-**描述**: 查看我发布的需求订单
+: `GET /api/mini/orders/published`
 
-**请求参数**:
+描述
+
+: 查看我发布的需求订单
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
@@ -497,7 +622,10 @@ Query Parameters:
 - status: 1 (可选，筛选状态)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -541,11 +669,18 @@ Query Parameters:
 
 ### 4.3 获取我接的订单
 
-**接口**: `GET /api/mini/orders/taken`
+接口
 
-**描述**: 查看我接的订单
+: `GET /api/mini/orders/taken`
 
-**请求参数**:
+描述
+
+: 查看我接的订单
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
@@ -553,7 +688,10 @@ Query Parameters:
 - status: 1 (可选)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -600,16 +738,26 @@ Query Parameters:
 
 ### 4.4 获取订单详情
 
-**接口**: `GET /api/mini/orders/:id`
+接口
 
-**描述**: 获取订单详细信息
+: `GET /api/mini/orders/:id`
 
-**路径参数**:
+描述
+
+: 获取订单详细信息
+
+路径参数
+
+:
+
 ```
 id: 3001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -659,16 +807,26 @@ id: 3001
 
 ### 4.5 更新订单状态
 
-**接口**: `PUT /api/mini/orders/:id/status`
+接口
 
-**描述**: 更新订单状态 (开始服务/确认完成等)
+: `PUT /api/mini/orders/:id/status`
 
-**路径参数**:
+描述
+
+: 更新订单状态 (开始服务/确认完成等)
+
+路径参数
+
+:
+
 ```
 id: 3001
 ```
 
-**请求参数**:
+请求参数
+
+:
+
 ```json
 {
   "status": 3,
@@ -676,7 +834,10 @@ id: 3001
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -692,16 +853,26 @@ id: 3001
 
 ### 4.6 取消订单
 
-**接口**: `POST /api/mini/orders/:id/cancel`
+接口
 
-**描述**: 取消订单
+: `POST /api/mini/orders/:id/cancel`
 
-**路径参数**:
+描述
+
+: 取消订单
+
+路径参数
+
+:
+
 ```
 id: 3001
 ```
 
-**请求参数**:
+请求参数
+
+:
+
 ```json
 {
   "reason": "临时有事，无法按时上门",
@@ -709,7 +880,10 @@ id: 3001
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -722,11 +896,18 @@ id: 3001
 
 ### 5.1 发布评价
 
-**接口**: `POST /api/review`
+接口
 
-**描述**: 对订单进行评价
+: `POST /api/review`
 
-**请求参数**:
+描述
+
+: 对订单进行评价
+
+请求参数
+
+:
+
 ```json
 {
   "orderId": 3001,
@@ -738,7 +919,10 @@ id: 3001
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -754,16 +938,26 @@ id: 3001
 
 ### 5.2 获取用户评价列表
 
-**接口**: `GET /api/mini/reviews/user/:userId`
+接口
 
-**描述**: 查看某个用户的所有评价
+: `GET /api/mini/reviews/user/:userId`
 
-**路径参数**:
+描述
+
+: 查看某个用户的所有评价
+
+路径参数
+
+:
+
 ```
 userId: 2001
 ```
 
-**请求参数**:
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
@@ -771,7 +965,10 @@ Query Parameters:
 - type: all (all-全部 good-好评 normal-中评 bad-差评)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -807,11 +1004,18 @@ Query Parameters:
 
 ### 6.1 获取用户信息
 
-**接口**: `GET /api/mini/user/profile`
+接口
 
-**描述**: 获取当前登录用户信息
+: `GET /api/mini/user/profile`
 
-**响应数据**:
+描述
+
+: 获取当前登录用户信息
+
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -838,11 +1042,18 @@ Query Parameters:
 
 ### 6.2 更新用户信息
 
-**接口**: `PUT /api/mini/user/profile`
+接口
 
-**描述**: 更新用户个人信息
+: `PUT /api/mini/user/profile`
 
-**请求参数**:
+描述
+
+: 更新用户个人信息
+
+请求参数
+
+:
+
 ```json
 {
   "nickname": "张小华",
@@ -851,7 +1062,10 @@ Query Parameters:
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -867,16 +1081,26 @@ Query Parameters:
 
 ### 6.3 获取其他用户信息
 
-**接口**: `GET /api/mini/user/:id`
+接口
 
-**描述**: 查看其他用户公开信息
+: `GET /api/mini/user/:id`
 
-**路径参数**:
+描述
+
+: 查看其他用户公开信息
+
+路径参数
+
+:
+
 ```
 id: 3001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -906,16 +1130,26 @@ id: 3001
 
 ### 6.4 关注用户
 
-**接口**: `POST /api/mini/user/:id/follow`
+接口
 
-**描述**: 关注某个用户
+: `POST /api/mini/user/:id/follow`
 
-**路径参数**:
+描述
+
+: 关注某个用户
+
+路径参数
+
+:
+
 ```
 id: 3001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -929,16 +1163,26 @@ id: 3001
 
 ### 6.5 取消关注
 
-**接口**: `DELETE /api/mini/user/:id/follow`
+接口
 
-**描述**: 取消关注
+: `DELETE /api/mini/user/:id/follow`
 
-**路径参数**:
+描述
+
+: 取消关注
+
+路径参数
+
+:
+
 ```
 id: 3001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -952,18 +1196,28 @@ id: 3001
 
 ### 6.6 我的关注列表
 
-**接口**: `GET /api/mini/user/following`
+接口
 
-**描述**: 查看我关注的用户列表
+: `GET /api/mini/user/following`
 
-**请求参数**:
+描述
+
+: 查看我关注的用户列表
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
 - pageSize: 10
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -992,28 +1246,44 @@ Query Parameters:
 
 ### 6.7 我的粉丝列表
 
-**接口**: `GET /api/mini/user/follower`
+接口
 
-**描述**: 查看我的粉丝列表
+: `GET /api/mini/user/follower`
 
-**请求参数**:
+描述
+
+: 查看我的粉丝列表
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
 - pageSize: 10
 ```
 
-**响应数据**: (结构同关注列表)
+响应数据
+
+: (结构同关注列表)
 
 ## 7. 足迹接口
 
 ### 7.1 我的足迹列表
 
-**接口**: `GET /api/mini/footprints`
+接口
 
-**描述**: 查看我的浏览足迹
+: `GET /api/mini/footprints`
 
-**请求参数**:
+描述
+
+: 查看我的浏览足迹
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
@@ -1021,7 +1291,10 @@ Query Parameters:
 - dateGroup: today (today-今天 yesterday-昨天 earlier-更早)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1061,18 +1334,28 @@ Query Parameters:
 
 ### 7.2 清除足迹
 
-**接口**: `DELETE /api/mini/footprints`
+接口
 
-**描述**: 批量清除足迹
+: `DELETE /api/mini/footprints`
 
-**请求参数**:
+描述
+
+: 批量清除足迹
+
+请求参数
+
+:
+
 ```json
 {
   "ids": [1001, 1002, 1003]
 }
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1085,11 +1368,18 @@ Query Parameters:
 
 ### 8.1 消息列表
 
-**接口**: `GET /api/mini/messages`
+接口
 
-**描述**: 获取消息通知列表
+: `GET /api/mini/messages`
 
-**请求参数**:
+描述
+
+: 获取消息通知列表
+
+请求参数
+
+:
+
 ```
 Query Parameters:
 - page: 1
@@ -1097,7 +1387,10 @@ Query Parameters:
 - type: all (all-全部 system-系统 order-订单 review-评价)
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1129,16 +1422,26 @@ Query Parameters:
 
 ### 8.2 标记已读
 
-**接口**: `PUT /api/mini/message/:id/read`
+接口
 
-**描述**: 标记消息为已读
+: `PUT /api/mini/message/:id/read`
 
-**路径参数**:
+描述
+
+: 标记消息为已读
+
+路径参数
+
+:
+
 ```
 id: 6001
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1149,11 +1452,18 @@ id: 6001
 
 ### 8.3 一键已读
 
-**接口**: `PUT /api/mini/messages/read-all`
+接口
 
-**描述**: 将所有消息标记为已读
+: `PUT /api/mini/messages/read-all`
 
-**响应数据**:
+描述
+
+: 将所有消息标记为已读
+
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1166,17 +1476,27 @@ id: 6001
 
 ### 9.1 上传图片
 
-**接口**: `POST /api/mini/upload/image`
+接口
 
-**描述**: 上传图片到 OSS
+: `POST /api/mini/upload/image`
 
-**请求参数**: (FormData)
+描述
+
+: 上传图片到 OSS
+
+请求参数
+
+: (FormData)
+
 ```
 file: image_file
 type: demand/review/avatar
 ```
 
-**响应数据**:
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1195,11 +1515,18 @@ type: demand/review/avatar
 
 ### 10.1 获取分类列表
 
-**接口**: `GET /api/mini/categories`
+接口
 
-**描述**: 获取所有服务分类
+: `GET /api/mini/categories`
 
-**响应数据**:
+描述
+
+: 获取所有服务分类
+
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1229,11 +1556,18 @@ type: demand/review/avatar
 
 ### 11.1 首页数据
 
-**接口**: `GET /api/mini/home`
+接口
 
-**描述**: 获取首页推荐数据
+: `GET /api/mini/home`
 
-**响应数据**:
+描述
+
+: 获取首页推荐数据
+
+响应数据
+
+:
+
 ```json
 {
   "code": 200,
@@ -1259,8 +1593,16 @@ type: demand/review/avatar
 }
 ```
 
----
+***
 
-**版本**: v1.0  
-**更新日期**: 2026-03-26  
-**作者**: AI 后端工程师
+版本
+
+: v1.0\\
+
+更新日期
+
+: 2026-03-26\\
+
+作者
+
+: AI 后端工程师

@@ -49,10 +49,9 @@ public class DemandServiceImpl extends ServiceImpl<DemandMapper, Demand> impleme
         // 状态筛选
         if (status != null) {
             wrapper.eq(Demand::getStatus, status);
-        } else {
-            // 默认查询招募中的需求
-            wrapper.eq(Demand::getStatus, 1);
         }
+        // 注意：当status为null时，不添加状态筛选条件，查询所有状态的需求
+        // 小程序C端需要显式传递status=1来查询招募中的需求
         
         // 关键词搜索
         if (StrUtil.isNotBlank(keyword)) {

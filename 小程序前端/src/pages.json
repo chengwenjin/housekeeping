@@ -1,16 +1,16 @@
 {
   "pages": [
     {
-      "path": "pages/index/index",
+      "path": "pages/login/login",
       "style": {
-        "navigationBarTitleText": "家政速帮",
+        "navigationBarTitleText": "登录",
         "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/login/login",
+      "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "登录",
+        "navigationBarTitleText": "家政速帮",
         "navigationStyle": "custom"
       }
     },

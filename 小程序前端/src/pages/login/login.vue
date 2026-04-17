@@ -24,11 +24,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
 
 const userStore = useUserStore()
 const loading = ref(false)
+
+onMounted(() => {
+  if (userStore.isLoggedIn) {
+    uni.switchTab({
+      url: '/pages/index/index'
+    })
+  }
+})
 
 const handleLogin = async () => {
   if (loading.value) return

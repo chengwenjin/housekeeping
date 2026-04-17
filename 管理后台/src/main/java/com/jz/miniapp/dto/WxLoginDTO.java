@@ -23,17 +23,15 @@ public class WxLoginDTO {
     private String code;
 
     /**
-     * 加密数据
+     * 加密数据（可选，用于解密用户敏感信息）
      */
-    @NotBlank(message = "encryptedData 不能为空")
-    @Schema(description = "加密数据", required = true)
+    @Schema(description = "加密数据（可选）")
     private String encryptedData;
 
     /**
-     * 解密向量
+     * 解密向量（可选，用于解密用户敏感信息）
      */
-    @NotBlank(message = "iv 不能为空")
-    @Schema(description = "解密向量 iv", required = true)
+    @Schema(description = "解密向量 iv（可选）")
     private String iv;
 
     /**

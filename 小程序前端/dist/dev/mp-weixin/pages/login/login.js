@@ -7,6 +7,13 @@ const _sfc_main = {
     __expose();
     const userStore = store_user.useUserStore();
     const loading = common_vendor.ref(false);
+    common_vendor.onMounted(() => {
+      if (userStore.isLoggedIn) {
+        common_vendor.index.switchTab({
+          url: "/pages/index/index"
+        });
+      }
+    });
     const handleLogin = async () => {
       if (loading.value)
         return;

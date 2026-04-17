@@ -79,22 +79,13 @@ const _sfc_main = {
           params.categoryId = selectedCategory.value.id;
         }
         const res = await api_index.demandApi.getList(params);
-        console.log('【调试】需求列表接口返回:', JSON.stringify(res));
-        console.log('【调试】res.code:', res.code);
-        console.log('【调试】res.data:', JSON.stringify(res.data));
         if (res.code === 200) {
-          const newList = ((_b = res.data) == null ? void 0 : _b.list) || [];
-          console.log('【调试】从 res.data.list 取到的数据条数:', newList.length);
-          console.log('【调试】res.data 是否直接是数组:', Array.isArray(res.data));
-          if (Array.isArray(res.data) && res.data.length > 0) {
-            console.log('【调试】res.data 直接是数组，长度:', res.data.length);
-          }
+          const newList = ((_b = res.data) == null ? void 0 : _b.records) || ((_b = res.data) == null ? void 0 : _b.list) || [];
           if (isRefresh) {
             demandList.value = newList;
           } else {
             demandList.value = [...demandList.value, ...newList];
           }
-          console.log('【调试】最终 demandList 长度:', demandList.value.length);
           const pagination = ((_c = res.data) == null ? void 0 : _c.pagination) || {};
           hasMore.value = page.value < pagination.totalPages;
           page.value++;

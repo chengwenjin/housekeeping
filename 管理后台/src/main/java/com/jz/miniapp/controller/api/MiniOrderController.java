@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/orders")
+@RequestMapping("/mini/orders")
 @Tag(name = "小程序 - 订单", description = "小程序订单接口")
 public class MiniOrderController {
 

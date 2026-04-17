@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/demands")
+@RequestMapping("/mini/demands")
 @Tag(name = "小程序 - 需求", description = "小程序需求接口")
 public class MiniDemandController {
 

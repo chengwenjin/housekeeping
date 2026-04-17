@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/follows")
+@RequestMapping("/mini/follows")
 @RequiredArgsConstructor
 @Tag(name = "小程序 - 关注", description = "小程序关注接口")
 public class MiniFollowController {

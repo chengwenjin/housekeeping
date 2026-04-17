@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/footprints")
+@RequestMapping("/mini/footprints")
 @RequiredArgsConstructor
 @Tag(name = "小程序 - 足迹", description = "小程序足迹接口")
 public class MiniFootprintController {

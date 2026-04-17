@@ -25,7 +25,7 @@ import javax.validation.Valid;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/auth")
+@RequestMapping("/mini/auth")
 @Tag(name = "小程序 - 认证", description = "小程序认证接口")
 public class MiniAuthController {
 

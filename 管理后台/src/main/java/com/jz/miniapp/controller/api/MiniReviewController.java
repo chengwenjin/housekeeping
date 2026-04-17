@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/reviews")
+@RequestMapping("/mini/reviews")
 @Tag(name = "小程序 - 评价", description = "小程序评价接口")
 public class MiniReviewController {
 

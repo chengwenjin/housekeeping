@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/categories")
+@RequestMapping("/mini/categories")
 @RequiredArgsConstructor
 @Tag(name = "小程序 - 分类", description = "小程序分类接口")
 public class MiniCategoryController {

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/mini/home")
+@RequestMapping("/mini/home")
 @RequiredArgsConstructor
 @Tag(name = "小程序 - 首页", description = "小程序首页推荐接口")
 public class MiniHomeController {

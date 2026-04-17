@@ -187,7 +187,7 @@ public class JwtAuthenticationFilter implements HandlerInterceptor {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         
-        Result<Object> result = Result.fail(code.getCode(), message);
+        Result<Object> result = Result.error(code.getCode(), message);
         String jsonResponse = JSON.toJSONString(result);
         
         response.getWriter().write(jsonResponse);

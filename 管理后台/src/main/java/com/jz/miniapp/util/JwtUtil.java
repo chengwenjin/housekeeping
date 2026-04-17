@@ -64,10 +64,10 @@ public class JwtUtil {
         Date expirationDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
-                .claims(claims)
-                .issuedAt(now)
-                .expiration(expirationDate)
-                .signWith(getSecretKey())
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expirationDate)
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -78,10 +78,9 @@ public class JwtUtil {
             }
 
             return Jwts.parser()
-                    .verifyWith(getSecretKey())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+                    .setSigningKey(getSecretKey())
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
             log.warn("Token已过期: {}", e.getMessage());
             throw new RuntimeException("Token已过期");

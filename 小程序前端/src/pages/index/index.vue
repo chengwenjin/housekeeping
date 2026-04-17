@@ -214,7 +214,7 @@ const loadDemands = async (isRefresh = false) => {
     const res = await demandApi.getList(params)
     
     if (res.code === 200) {
-      const newList = res.data?.list || []
+      const newList = res.data?.records || res.data?.list || []
       if (isRefresh) {
         demandList.value = newList
       } else {

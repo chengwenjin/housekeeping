@@ -46,16 +46,16 @@
         style="width: 100%"
       >
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="operator" label="操作人员" width="120" />
-        <el-table-column prop="operationType" label="操作类型" width="100">
+        <el-table-column prop="username" label="操作人员" width="120" />
+        <el-table-column prop="action" label="操作类型" width="100">
           <template #default="{ row }">
-            <el-tag :type="getTypeTag(row.operationType)">
-              {{ getTypeText(row.operationType) }}
+            <el-tag :type="getTypeTag(row.action)">
+              {{ getTypeText(row.action) }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="module" label="操作模块" width="120" />
-        <el-table-column prop="action" label="操作方法" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="method" label="请求方法" width="100" />
         <el-table-column prop="ip" label="IP 地址" width="140" />
         <el-table-column prop="createdAt" label="操作时间" width="160">
           <template #default="{ row }">
@@ -90,24 +90,27 @@
     >
       <el-descriptions :column="2" border>
         <el-descriptions-item label="日志 ID">{{ selectedLog.id }}</el-descriptions-item>
-        <el-descriptions-item label="操作人员">{{ selectedLog.operator }}</el-descriptions-item>
+        <el-descriptions-item label="操作人员">{{ selectedLog.username || '-' }}</el-descriptions-item>
         <el-descriptions-item label="操作类型">
-          <el-tag :type="getTypeTag(selectedLog.operationType)">
-            {{ getTypeText(selectedLog.operationType) }}
+          <el-tag :type="getTypeTag(selectedLog.action)">
+            {{ getTypeText(selectedLog.action) }}
           </el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="操作模块">{{ selectedLog.module }}</el-descriptions-item>
-        <el-descriptions-item label="操作方法" :span="2">{{ selectedLog.action }}</el-descriptions-item>
-        <el-descriptions-item label="请求方法">{{ selectedLog.method }}</el-descriptions-item>
+        <el-descriptions-item label="操作模块">{{ selectedLog.module || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="请求方法">{{ selectedLog.method || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="请求 URL">{{ selectedLog.url || '-' }}</el-descriptions-item>
         <el-descriptions-item label="请求参数" :span="2">
-          <pre style="max-height: 200px; overflow-y: auto; background: #f5f7fa; padding: 10px; border-radius: 4px;">{{ JSON.stringify(JSON.parse(selectedLog.requestParams || '{}'), null, 2) }}</pre>
+          <pre v-if="selectedLog.requestData" style="max-height: 200px; overflow-y: auto; background: #f5f7fa; padding: 10px; border-radius: 4px;">{{ formatJson(selectedLog.requestData) }}</pre>
+          <span v-else>-</span>
         </el-descriptions-item>
         <el-descriptions-item label="响应结果" :span="2">
-          <pre style="max-height: 200px; overflow-y: auto; background: #f5f7fa; padding: 10px; border-radius: 4px;">{{ JSON.stringify(JSON.parse(selectedLog.responseResult || '{}'), null, 2) }}</pre>
+          <pre v-if="selectedLog.responseData" style="max-height: 200px; overflow-y: auto; background: #f5f7fa; padding: 10px; border-radius: 4px;">{{ formatJson(selectedLog.responseData) }}</pre>
+          <span v-else>-</span>
         </el-descriptions-item>
-        <el-descriptions-item label="IP 地址">{{ selectedLog.ip }}</el-descriptions-item>
-        <el-descriptions-item label="User Agent" :span="2">{{ selectedLog.userAgent }}</el-descriptions-item>
-        <el-descriptions-item label="执行时长">{{ selectedLog.executionTime }} ms</el-descriptions-item>
+        <el-descriptions-item label="响应状态码">{{ selectedLog.responseCode || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="执行时长">{{ selectedLog.duration || 0 }} ms</el-descriptions-item>
+        <el-descriptions-item label="IP 地址">{{ selectedLog.ip || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="User Agent" :span="2">{{ selectedLog.userAgent || '-' }}</el-descriptions-item>
         <el-descriptions-item label="操作时间">{{ formatDate(selectedLog.createdAt) }}</el-descriptions-item>
       </el-descriptions>
       
@@ -214,6 +217,15 @@ const getTypeText = (type) => {
 
 const formatDate = (date) => {
   return date ? dayjs(date).format('YYYY-MM-DD HH:mm:ss') : '-'
+}
+
+const formatJson = (jsonStr) => {
+  if (!jsonStr) return '-'
+  try {
+    return JSON.stringify(JSON.parse(jsonStr), null, 2)
+  } catch (e) {
+    return jsonStr
+  }
 }
 
 onMounted(() => {

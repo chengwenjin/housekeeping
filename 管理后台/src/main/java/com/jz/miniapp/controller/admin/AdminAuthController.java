@@ -5,6 +5,7 @@ import com.jz.miniapp.common.Result;
 import com.jz.miniapp.dto.AdminLoginDTO;
 import com.jz.miniapp.entity.Admin;
 import com.jz.miniapp.service.AdminService;
+import com.jz.miniapp.util.JwtUtil;
 import com.jz.miniapp.vo.AdminLoginVO;
 import com.jz.miniapp.vo.AdminVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,6 +33,15 @@ public class AdminAuthController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Value("${jwt.admin-expiration}")
+    private Long adminExpiration;
+
+    @Value("${jwt.refresh-expiration}")
+    private Long refreshExpiration;
+
     /**
      * 管理员登录
      */
@@ -40,19 +51,19 @@ public class AdminAuthController {
     public Result<AdminLoginVO> login(@Valid @RequestBody AdminLoginDTO dto) {
         log.info("管理员登录请求 - username: {}", dto.getUsername());
 
-        // 管理员登录
         Admin admin = adminService.login(dto.getUsername(), dto.getPassword());
 
-        // 构建响应
         AdminLoginVO loginVO = new AdminLoginVO();
         AdminVO adminVO = new AdminVO();
         BeanUtils.copyProperties(admin, adminVO);
         loginVO.setAdmin(adminVO);
         
-        // TODO: 生成 token (暂时使用 mock 数据)
-        loginVO.setToken("mock_admin_token_" + admin.getId());
-        loginVO.setRefreshToken("mock_admin_refresh_token_" + admin.getId());
-        loginVO.setExpiresIn(28800L); // 8 小时
+        String token = jwtUtil.generateAdminToken(admin.getId(), admin.getUsername());
+        String refreshToken = jwtUtil.generateRefreshToken(admin.getId(), "admin");
+        
+        loginVO.setToken(token);
+        loginVO.setRefreshToken(refreshToken);
+        loginVO.setExpiresIn(adminExpiration / 1000);
 
         log.info("管理员登录成功 - adminId: {}", admin.getId());
         return Result.success(loginVO);

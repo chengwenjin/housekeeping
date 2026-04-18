@@ -1,6 +1,7 @@
 package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.Category;
 import com.jz.miniapp.mapper.CategoryMapper;
@@ -11,9 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 管理后台分类 Controller
- */
 @Slf4j
 @RestController
 @RequestMapping("/admin/categories")
@@ -23,11 +21,9 @@ public class AdminCategoryController {
 
     private final CategoryMapper categoryMapper;
 
-    /**
-     * 获取分类列表
-     */
     @GetMapping
     @Operation(summary = "获取分类列表", description = "管理员查看分类列表")
+    @LogOperation(module = "分类管理", action = "QUERY", description = "查询分类列表")
     public Result<Page<Category>> getCategories(
             @Parameter(description = "页码", example = "1") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量", example = "10") @RequestParam(defaultValue = "10") int pageSize,
@@ -38,7 +34,6 @@ public class AdminCategoryController {
         
         Page<Category> categoryPage = new Page<>(page, pageSize);
         
-        // 构建查询条件
         var wrapper = new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Category>();
         if (keyword != null && !keyword.isEmpty()) {
             wrapper.like(Category::getName, keyword);
@@ -53,11 +48,9 @@ public class AdminCategoryController {
         return Result.success(categoryPage);
     }
 
-    /**
-     * 获取分类详情
-     */
     @GetMapping("/{id}")
     @Operation(summary = "获取分类详情", description = "管理员查看分类详细信息")
+    @LogOperation(module = "分类管理", action = "QUERY", description = "查询分类详情")
     public Result<Category> getCategoryById(
             @Parameter(description = "分类 ID", required = true) @PathVariable Long id) {
         
@@ -71,16 +64,13 @@ public class AdminCategoryController {
         return Result.success(category);
     }
 
-    /**
-     * 创建分类
-     */
     @PostMapping
     @Operation(summary = "创建分类", description = "管理员创建新的服务分类")
+    @LogOperation(module = "分类管理", action = "CREATE", description = "创建分类")
     public Result<Category> createCategory(@RequestBody Category category) {
         
         log.info("管理员创建分类 - name: {}", category.getName());
         
-        // 设置默认值
         if (category.getStatus() == null) {
             category.setStatus(1);
         }
@@ -93,11 +83,9 @@ public class AdminCategoryController {
         return Result.success(category);
     }
 
-    /**
-     * 更新分类
-     */
     @PutMapping("/{id}")
     @Operation(summary = "更新分类", description = "管理员更新分类信息")
+    @LogOperation(module = "分类管理", action = "UPDATE", description = "更新分类")
     public Result<Category> updateCategory(
             @Parameter(description = "分类 ID", required = true) @PathVariable Long id,
             @RequestBody Category category) {
@@ -115,11 +103,9 @@ public class AdminCategoryController {
         return Result.success(category);
     }
 
-    /**
-     * 删除分类
-     */
     @DeleteMapping("/{id}")
     @Operation(summary = "删除分类", description = "管理员删除服务分类")
+    @LogOperation(module = "分类管理", action = "DELETE", description = "删除分类")
     public Result<Void> deleteCategory(
             @Parameter(description = "分类 ID", required = true) @PathVariable Long id) {
         
@@ -135,11 +121,9 @@ public class AdminCategoryController {
         return Result.success();
     }
 
-    /**
-     * 更新分类状态
-     */
     @PutMapping("/{id}/status")
     @Operation(summary = "更新分类状态", description = "管理员更新分类启用/禁用状态")
+    @LogOperation(module = "分类管理", action = "UPDATE", description = "更新分类状态")
     public Result<Void> updateCategoryStatus(
             @Parameter(description = "分类 ID", required = true) @PathVariable Long id,
             @Parameter(description = "状态：1-启用，0-禁用", required = true) @RequestParam Integer status) {

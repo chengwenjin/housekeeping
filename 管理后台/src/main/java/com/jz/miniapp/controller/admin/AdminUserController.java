@@ -2,6 +2,7 @@ package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.User;
 import com.jz.miniapp.mapper.UserMapper;
@@ -32,6 +33,7 @@ public class AdminUserController {
      */
     @GetMapping
     @Operation(summary = "获取用户列表")
+    @LogOperation(module = "用户管理", action = "QUERY", description = "查询用户列表")
     public Result<Page<User>> getUserList(
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") Long page,
             @Parameter(description = "每页数量") @RequestParam(defaultValue = "20") Long pageSize,
@@ -62,6 +64,7 @@ public class AdminUserController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "获取用户详情")
+    @LogOperation(module = "用户管理", action = "QUERY", description = "查询用户详情")
     public Result<User> getUserDetail(@Parameter(description = "用户 ID") @PathVariable Long id) {
         User user = userMapper.selectById(id);
         if (user == null) {
@@ -75,6 +78,7 @@ public class AdminUserController {
      */
     @PutMapping("/{id}/status")
     @Operation(summary = "更新用户状态")
+    @LogOperation(module = "用户管理", action = "UPDATE", description = "更新用户状态")
     public Result<Void> updateUserStatus(
             @Parameter(description = "用户 ID") @PathVariable Long id,
             @Parameter(description = "新状态") @RequestBody User statusRequest) {
@@ -96,6 +100,7 @@ public class AdminUserController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "删除用户")
+    @LogOperation(module = "用户管理", action = "DELETE", description = "删除用户")
     public Result<Void> deleteUser(@Parameter(description = "用户 ID") @PathVariable Long id) {
         User user = userMapper.selectById(id);
         if (user == null) {

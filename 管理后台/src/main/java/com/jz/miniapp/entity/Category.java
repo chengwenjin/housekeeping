@@ -54,9 +54,4 @@ public class Category {
      * 更新时间
      */
     private LocalDateTime updatedAt;
-
-    /**
-     * 删除时间（软删除）
-     */
-    private LocalDateTime deletedAt;
 }

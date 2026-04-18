@@ -1,5 +1,6 @@
 package com.jz.miniapp.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -95,5 +97,37 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
         
         updateById(review);
         log.info("审核评价成功 - reviewId: {}, status: {}", id, status);
+    }
+
+    @Override
+    public Page<Review> getAdminReviewPage(int page, int pageSize, String keyword, BigDecimal rating, Integer type, Integer status) {
+        Page<Review> mpPage = new Page<>(page, pageSize);
+        
+        LambdaQueryWrapper<Review> wrapper = new LambdaQueryWrapper<>();
+        
+        // 关键词查询（评价内容）
+        if (StrUtil.isNotBlank(keyword)) {
+            wrapper.like(Review::getContent, keyword);
+        }
+        
+        // 评分筛选
+        if (rating != null) {
+            wrapper.eq(Review::getRating, rating);
+        }
+        
+        // 类型筛选
+        if (type != null) {
+            wrapper.eq(Review::getType, type);
+        }
+        
+        // 状态筛选
+        if (status != null) {
+            wrapper.eq(Review::getStatus, status);
+        }
+        
+        // 按创建时间倒序
+        wrapper.orderByDesc(Review::getCreatedAt);
+        
+        return page(mpPage, wrapper);
     }
 }

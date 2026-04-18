@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jz.miniapp.entity.Review;
 
+import java.math.BigDecimal;
+
 /**
  * 评价服务接口
  * 
@@ -49,4 +51,17 @@ public interface ReviewService extends IService<Review> {
      * @param userId 用户 ID
      */
     void auditReview(Long id, Integer status, Long userId);
+
+    /**
+     * 管理员分页查询评价列表
+     * 
+     * @param page 页码
+     * @param pageSize 每页数量
+     * @param keyword 关键词（搜索评价内容）
+     * @param rating 评分（可选）
+     * @param type 类型（可选）
+     * @param status 状态（可选）
+     * @return 评价分页数据
+     */
+    Page<Review> getAdminReviewPage(int page, int pageSize, String keyword, BigDecimal rating, Integer type, Integer status);
 }

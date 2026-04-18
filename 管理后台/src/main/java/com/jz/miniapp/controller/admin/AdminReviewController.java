@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,13 +41,32 @@ public class AdminReviewController {
     public Result<Page<ReviewVO>> getReviews(
             @Parameter(description = "页码", example = "1") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量", example = "10") @RequestParam(defaultValue = "10") int pageSize,
+            @Parameter(description = "关键词") @RequestParam(required = false) String keyword,
+            @Parameter(description = "评分") @RequestParam(required = false) BigDecimal rating,
+            @Parameter(description = "类型") @RequestParam(required = false) Integer reviewType,
             @Parameter(description = "状态") @RequestParam(required = false) Integer status) {
         
-        log.info("管理员获取评价列表 - page: {}, pageSize: {}", page, pageSize);
+        log.info("管理员获取评价列表 - page: {}, pageSize: {}, keyword: {}, rating: {}, reviewType: {}, status: {}", 
+                page, pageSize, keyword, rating, reviewType, status);
         
-        // TODO: 实现管理员查询所有评价的逻辑
-        
-        return Result.success(null);
+        try {
+            Page<Review> reviewPage = reviewService.getAdminReviewPage(page, pageSize, keyword, rating, reviewType, status);
+            
+            Page<ReviewVO> voPage = new Page<>(reviewPage.getCurrent(), reviewPage.getSize(), reviewPage.getTotal());
+            
+            List<ReviewVO> voList = reviewPage.getRecords().stream()
+                    .map(this::convertToVO)
+                    .collect(Collectors.toList());
+            voPage.setRecords(voList);
+            
+            log.info("评价列表返回 - 总数：{}, 当前页：{}, 每页大小：{}, 记录数：{}", 
+                    reviewPage.getTotal(), reviewPage.getCurrent(), reviewPage.getSize(), voList.size());
+            
+            return Result.success(voPage);
+        } catch (Exception e) {
+            log.error("获取评价列表失败", e);
+            return Result.fail("获取评价列表失败：" + e.getMessage());
+        }
     }
 
     /**

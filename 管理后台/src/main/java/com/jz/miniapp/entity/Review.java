@@ -104,9 +104,16 @@ public class Review implements Serializable {
     /**
      * 回复时间
      */
-    @TableField("reply_time")
+    @TableField("reply_at")
     @Schema(description = "回复时间")
     private LocalDateTime replyTime;
+
+    /**
+     * 有用次数
+     */
+    @TableField("helpful_count")
+    @Schema(description = "有用次数")
+    private Integer helpfulCount;
 
     /**
      * 状态 (0:待审核，1:已通过，2:已拒绝)
@@ -114,6 +121,13 @@ public class Review implements Serializable {
     @TableField("status")
     @Schema(description = "状态")
     private Integer status;
+
+    /**
+     * 逻辑删除时间
+     */
+    @TableField("deleted_at")
+    @Schema(description = "逻辑删除时间")
+    private LocalDateTime deletedAt;
 
     /**
      * 创建时间

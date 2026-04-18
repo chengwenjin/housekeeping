@@ -83,7 +83,7 @@ public class Review implements Serializable {
     /**
      * 评价类型 (1:客户评价服务者，2:服务者评价客户)
      */
-    @TableField("type")
+    @TableField("review_type")
     @Schema(description = "评价类型")
     private Integer type;
 

@@ -133,11 +133,29 @@ public class OperationLogAspect {
                 long duration = System.currentTimeMillis() - startTime;
                 operationLog.setDuration(duration);
                 
+                if (operationLog.getAdminId() == null) {
+                    Long currentAdminId = UserContext.getAdminId();
+                    String currentUsername = UserContext.getUsername();
+                    if (currentAdminId != null) {
+                        operationLog.setAdminId(currentAdminId);
+                    }
+                    if (currentUsername != null) {
+                        operationLog.setUsername(currentUsername);
+                    }
+                }
+                
+                log.info("准备保存操作日志 - URL: {}, Action: {}, Module: {}, AdminId: {}, Username: {}",
+                        operationLog.getUrl(), operationLog.getAction(), operationLog.getModule(),
+                        operationLog.getAdminId(), operationLog.getUsername());
+                
                 if (shouldSaveLog(operationLog)) {
-                    log.debug("保存操作日志: action={}, module={}, adminId={}, duration={}ms", 
+                    log.info("执行保存操作日志 - action={}, module={}, adminId={}, duration={}ms", 
                             operationLog.getAction(), operationLog.getModule(), 
                             operationLog.getAdminId(), duration);
                     operationLogService.save(operationLog);
+                    log.info("操作日志保存成功");
+                } else {
+                    log.info("操作日志不满足保存条件，跳过保存 - URL: {}", operationLog.getUrl());
                 }
             } catch (Exception e) {
                 log.error("保存操作日志失败", e);

@@ -2,6 +2,7 @@ package com.jz.miniapp.controller.admin;
 
 import com.jz.miniapp.common.AnonymousAccess;
 import com.jz.miniapp.common.Result;
+import com.jz.miniapp.common.UserContext;
 import com.jz.miniapp.dto.AdminLoginDTO;
 import com.jz.miniapp.entity.Admin;
 import com.jz.miniapp.service.AdminService;
@@ -52,6 +53,9 @@ public class AdminAuthController {
         log.info("管理员登录请求 - username: {}", dto.getUsername());
 
         Admin admin = adminService.login(dto.getUsername(), dto.getPassword());
+
+        UserContext.setAdminId(admin.getId());
+        UserContext.setUsername(admin.getUsername());
 
         AdminLoginVO loginVO = new AdminLoginVO();
         AdminVO adminVO = new AdminVO();

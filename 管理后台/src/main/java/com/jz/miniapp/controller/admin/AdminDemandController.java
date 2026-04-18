@@ -1,6 +1,7 @@
 package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.Demand;
 import com.jz.miniapp.service.DemandService;
@@ -17,12 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 管理后台需求 Controller
- * 
- * @author jiazheng
- * @since 2026-03-26
- */
 @Slf4j
 @RestController
 @RequestMapping("/admin/demands")
@@ -32,11 +27,9 @@ public class AdminDemandController {
     @Autowired
     private DemandService demandService;
 
-    /**
-     * 获取需求列表
-     */
     @GetMapping
     @Operation(summary = "获取需求列表", description = "管理员查看需求列表")
+    @LogOperation(module = "需求管理", action = "QUERY", description = "查询需求列表")
     public Result<Page<DemandVO>> getDemands(
             @Parameter(description = "页码", example = "1") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量", example = "10") @RequestParam(defaultValue = "10") int pageSize,
@@ -48,7 +41,6 @@ public class AdminDemandController {
         
         Page<Demand> demandPage = demandService.getDemands(page, pageSize, categoryId, city, null, status, null);
         
-        // 转换为 VO
         Page<DemandVO> voPage = new Page<>(demandPage.getCurrent(), demandPage.getSize(), demandPage.getTotal());
         List<DemandVO> voList = demandPage.getRecords().stream()
                 .map(this::convertToVO)
@@ -58,11 +50,9 @@ public class AdminDemandController {
         return Result.success(voPage);
     }
 
-    /**
-     * 获取需求详情
-     */
     @GetMapping("/{id}")
     @Operation(summary = "获取需求详情", description = "管理员查看需求详细信息")
+    @LogOperation(module = "需求管理", action = "QUERY", description = "查询需求详情")
     public Result<DemandVO> getDemandById(
             @Parameter(description = "需求 ID", required = true) @PathVariable Long id) {
         
@@ -76,11 +66,9 @@ public class AdminDemandController {
         return Result.success(convertToVO(demand));
     }
 
-    /**
-     * 下架需求
-     */
     @PutMapping("/{id}/offline")
     @Operation(summary = "下架需求", description = "管理员下架违规需求")
+    @LogOperation(module = "需求管理", action = "UPDATE", description = "下架需求")
     public Result<Void> offlineDemand(
             @Parameter(description = "需求 ID", required = true) @PathVariable Long id) {
         
@@ -91,18 +79,15 @@ public class AdminDemandController {
             return Result.fail("需求不存在");
         }
         
-        // 下架操作：删除或标记为已取消
-        demand.setStatus(5); // 已取消
+        demand.setStatus(5);
         demandService.updateById(demand);
         
         return Result.success(null);
     }
 
-    /**
-     * 删除需求
-     */
     @DeleteMapping("/{id}")
     @Operation(summary = "删除需求", description = "管理员删除需求")
+    @LogOperation(module = "需求管理", action = "DELETE", description = "删除需求")
     public Result<Void> deleteDemand(
             @Parameter(description = "需求 ID", required = true) @PathVariable Long id) {
         
@@ -113,19 +98,14 @@ public class AdminDemandController {
         return Result.success(null);
     }
 
-    /**
-     * 转换为 VO
-     */
     private DemandVO convertToVO(Demand demand) {
         DemandVO vo = new DemandVO();
         BeanUtils.copyProperties(demand, vo);
         
-        // 处理图片 URLs
         if (demand.getImages() != null && !demand.getImages().isEmpty()) {
             vo.setImages(Arrays.asList(demand.getImages().split(",")));
         }
         
-        // TODO: 设置分类名称、服务类型文本、状态文本等
         vo.setCategoryName("保洁");
         vo.setServiceTypeText("小时工");
         vo.setStatusText("招募中");

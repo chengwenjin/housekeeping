@@ -1,5 +1,6 @@
 package com.jz.miniapp.controller.admin;
 
+import com.jz.miniapp.common.AnonymousAccess;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.dto.AdminLoginDTO;
 import com.jz.miniapp.entity.Admin;
@@ -33,6 +34,7 @@ public class AdminAuthController {
     /**
      * 管理员登录
      */
+    @AnonymousAccess
     @PostMapping("/login")
     @Operation(summary = "管理员登录", description = "管理员账号密码登录")
     public Result<AdminLoginVO> login(@Valid @RequestBody AdminLoginDTO dto) {
@@ -83,6 +85,7 @@ public class AdminAuthController {
     /**
      * 刷新 Token
      */
+    @AnonymousAccess
     @PostMapping("/refresh")
     @Operation(summary = "刷新 Token", description = "使用 refresh token 刷新 access token")
     public Result<AdminLoginVO> refreshToken(@RequestParam String refreshToken) {

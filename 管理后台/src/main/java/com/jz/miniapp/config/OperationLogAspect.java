@@ -63,7 +63,16 @@ public class OperationLogAspect {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().getSimpleName();
         
-        log.debug("拦截管理后台操作: {}.{}", className, methodName);
+        log.info("========== 开始拦截管理后台操作 ==========");
+        log.info("拦截到方法: {}.{}", className, methodName);
+        log.info("Request是否为null: {}", request == null);
+        
+        if (request != null) {
+            log.info("请求URI: {}", request.getRequestURI());
+            log.info("请求URL: {}", request.getRequestURL());
+            log.info("请求方法: {}", request.getMethod());
+            log.info("请求路径是否包含/admin/: {}", request.getRequestURI().contains("/admin/"));
+        }
         
         OperationLog operationLog = new OperationLog();
         
@@ -191,18 +200,28 @@ public class OperationLogAspect {
     }
 
     private boolean shouldSaveLog(OperationLog log) {
+        log.info("========== shouldSaveLog 检查 ==========");
+        log.info("URL: {}", log.getUrl());
+        log.info("Action: {}", log.getAction());
+        log.info("Module: {}", log.getModule());
+        log.info("AdminId: {}", log.getAdminId());
+        
         if (log.getUrl() == null) {
+            log.info("shouldSaveLog 返回 false - URL 为 null");
             return false;
         }
         
         if (log.getUrl().contains("/admin/logs")) {
+            log.info("shouldSaveLog 返回 false - 是操作日志查询接口");
             return false;
         }
         
         if (!log.getUrl().contains("/admin/")) {
+            log.info("shouldSaveLog 返回 false - URL 不包含 /admin/");
             return false;
         }
         
+        log.info("shouldSaveLog 返回 true - 满足所有保存条件");
         return true;
     }
 

@@ -173,11 +173,15 @@ public class OperationLogAspect {
     }
 
     private boolean shouldSaveLog(OperationLog log) {
-        if ("/admin/logs".equals(log.getUrl()) || log.getUrl().contains("/admin/logs")) {
+        if (log.getUrl() == null) {
             return false;
         }
         
-        if (log.getAdminId() == null && !"LOGIN".equals(log.getAction())) {
+        if (log.getUrl().contains("/admin/logs")) {
+            return false;
+        }
+        
+        if (!log.getUrl().contains("/admin/")) {
             return false;
         }
         

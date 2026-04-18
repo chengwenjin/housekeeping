@@ -31,8 +31,6 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
         // 设置评价者
         review.setReviewerId(userId);
         
-        // 默认状态：待审核
-        review.setStatus(0);
         review.setCreatedAt(LocalDateTime.now());
         review.setUpdatedAt(LocalDateTime.now());
         
@@ -57,9 +55,6 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
         if (type != null) {
             wrapper.eq(Review::getType, type);
         }
-        
-        // 只查询已通过的评价
-        wrapper.eq(Review::getStatus, 1);
         
         wrapper.orderByDesc(Review::getCreatedAt);
         
@@ -86,17 +81,7 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void auditReview(Long id, Integer status, Long userId) {
-        Review review = getById(id);
-        if (review == null) {
-            throw new BusinessException("评价不存在");
-        }
-        
-        // 更新状态
-        review.setStatus(status);
-        review.setUpdatedAt(LocalDateTime.now());
-        
-        updateById(review);
-        log.info("审核评价成功 - reviewId: {}, status: {}", id, status);
+        log.warn("审核评价功能已禁用，数据库 reviews 表无 status 字段 - reviewId: {}, status: {}", id, status);
     }
 
     @Override
@@ -118,11 +103,6 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
         // 类型筛选
         if (type != null) {
             wrapper.eq(Review::getType, type);
-        }
-        
-        // 状态筛选
-        if (status != null) {
-            wrapper.eq(Review::getStatus, status);
         }
         
         // 按创建时间倒序

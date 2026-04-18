@@ -36,7 +36,8 @@
         <el-table-column prop="name" label="分类名称" min-width="150" />
         <el-table-column prop="icon" label="图标" width="100">
           <template #default="{ row }">
-            <el-icon v-if="row.icon" size="24"><component :is="row.icon" /></el-icon>
+            <span v-if="row.icon && row.icon.length <= 2" class="emoji-icon">{{ row.icon }}</span>
+            <el-icon v-else-if="row.icon" size="24"><component :is="row.icon" /></el-icon>
             <span v-else>-</span>
           </template>
         </el-table-column>
@@ -215,5 +216,12 @@ onMounted(() => {
 
 .search-form {
   margin-bottom: 20px;
+}
+
+.emoji-icon {
+  font-size: 28px;
+  line-height: 28px;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

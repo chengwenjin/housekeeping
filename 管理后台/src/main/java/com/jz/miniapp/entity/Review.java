@@ -116,20 +116,6 @@ public class Review implements Serializable {
     private Integer helpfulCount;
 
     /**
-     * 状态 (0:待审核，1:已通过，2:已拒绝)
-     */
-    @TableField("status")
-    @Schema(description = "状态")
-    private Integer status;
-
-    /**
-     * 逻辑删除时间
-     */
-    @TableField("deleted_at")
-    @Schema(description = "逻辑删除时间")
-    private LocalDateTime deletedAt;
-
-    /**
      * 创建时间
      */
     @TableField("created_at")

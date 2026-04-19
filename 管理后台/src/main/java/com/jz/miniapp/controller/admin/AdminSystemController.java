@@ -1,7 +1,6 @@
 package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.SystemConfig;
 import com.jz.miniapp.service.SystemConfigService;
@@ -26,7 +25,6 @@ public class AdminSystemController {
 
     @GetMapping("/configs")
     @Operation(summary = "获取配置列表")
-    @LogOperation(module = "系统管理", action = "QUERY", description = "获取配置列表")
     public Result<Page<SystemConfig>> getConfigs(
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量") @RequestParam(defaultValue = "10") int pageSize,
@@ -38,7 +36,6 @@ public class AdminSystemController {
 
     @GetMapping("/config/{key}")
     @Operation(summary = "根据 Key 获取配置")
-    @LogOperation(module = "系统管理", action = "QUERY", description = "根据 Key 获取配置")
     public Result<String> getConfigByKey(@PathVariable String key) {
         String value = systemConfigService.getConfigValueByKey(key);
         return Result.success(value);
@@ -46,7 +43,6 @@ public class AdminSystemController {
 
     @GetMapping("/configs/batch")
     @Operation(summary = "批量获取配置")
-    @LogOperation(module = "系统管理", action = "QUERY", description = "批量获取配置")
     public Result<Map<String, String>> getConfigsBatch(
             @Parameter(description = "配置键列表，逗号分隔") @RequestParam List<String> keys) {
         
@@ -56,7 +52,6 @@ public class AdminSystemController {
 
     @PutMapping("/config")
     @Operation(summary = "更新配置")
-    @LogOperation(module = "系统管理", action = "UPDATE", description = "更新配置")
     public Result<Void> updateConfig(
             @Parameter(description = "配置键") @RequestParam String key,
             @Parameter(description = "配置值") @RequestParam String value) {

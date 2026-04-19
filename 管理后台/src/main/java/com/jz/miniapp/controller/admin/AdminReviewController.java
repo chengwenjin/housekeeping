@@ -1,7 +1,6 @@
 package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.Review;
 import com.jz.miniapp.service.ReviewService;
@@ -30,7 +29,6 @@ public class AdminReviewController {
 
     @GetMapping
     @Operation(summary = "获取评价列表", description = "管理员查看所有评价")
-    @LogOperation(module = "评价管理", action = "QUERY", description = "查询评价列表")
     public Result<Page<ReviewVO>> getReviews(
             @Parameter(description = "页码", example = "1") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量", example = "10") @RequestParam(defaultValue = "10") int pageSize,
@@ -64,7 +62,6 @@ public class AdminReviewController {
 
     @GetMapping("/{id}")
     @Operation(summary = "获取评价详情", description = "管理员查看评价详细信息")
-    @LogOperation(module = "评价管理", action = "QUERY", description = "查询评价详情")
     public Result<ReviewVO> getReviewById(
             @Parameter(description = "评价 ID", required = true) @PathVariable Long id) {
         
@@ -80,7 +77,6 @@ public class AdminReviewController {
 
     @PostMapping("/{id}/audit")
     @Operation(summary = "审核评价", description = "管理员审核评价")
-    @LogOperation(module = "评价管理", action = "UPDATE", description = "审核评价")
     public Result<Void> auditReview(
             @Parameter(description = "评价 ID", required = true) @PathVariable Long id,
             @Parameter(description = "状态", required = true) @RequestParam Integer status) {
@@ -96,7 +92,6 @@ public class AdminReviewController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除评价", description = "管理员删除评价")
-    @LogOperation(module = "评价管理", action = "DELETE", description = "删除评价")
     public Result<Void> deleteReview(
             @Parameter(description = "评价 ID", required = true) @PathVariable Long id) {
         

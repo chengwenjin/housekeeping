@@ -1,6 +1,5 @@
 package com.jz.miniapp.controller.admin;
 
-import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.service.StatisticsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +24,6 @@ public class AdminStatisticsController {
 
     @GetMapping("/dashboard")
     @Operation(summary = "获取首页统计数据")
-    @LogOperation(module = "统计管理", action = "QUERY", description = "获取首页统计数据")
     public Result<Map<String, Object>> getDashboardStats() {
         Map<String, Object> stats = statisticsService.getDashboardStats();
         return Result.success(stats);
@@ -33,7 +31,6 @@ public class AdminStatisticsController {
 
     @GetMapping("/users")
     @Operation(summary = "获取用户统计数据")
-    @LogOperation(module = "统计管理", action = "QUERY", description = "获取用户统计数据")
     public Result<Map<String, Object>> getUserStatistics(
             @Parameter(description = "开始日期") 
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -46,7 +43,6 @@ public class AdminStatisticsController {
 
     @GetMapping("/orders")
     @Operation(summary = "获取订单统计数据")
-    @LogOperation(module = "统计管理", action = "QUERY", description = "获取订单统计数据")
     public Result<Map<String, Object>> getOrderStatistics(
             @Parameter(description = "开始日期") 
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -59,7 +55,6 @@ public class AdminStatisticsController {
 
     @GetMapping("/transactions")
     @Operation(summary = "获取交易统计数据")
-    @LogOperation(module = "统计管理", action = "QUERY", description = "获取交易统计数据")
     public Result<Map<String, Object>> getTransactionStatistics(
             @Parameter(description = "开始日期") 
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -72,7 +67,6 @@ public class AdminStatisticsController {
 
     @GetMapping("/demands")
     @Operation(summary = "获取需求统计数据")
-    @LogOperation(module = "统计管理", action = "QUERY", description = "获取需求统计数据")
     public Result<Map<String, Object>> getDemandStatistics(
             @Parameter(description = "开始日期") 
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -85,7 +79,6 @@ public class AdminStatisticsController {
 
     @GetMapping("/detail")
     @Operation(summary = "获取详细统计数据")
-    @LogOperation(module = "统计管理", action = "QUERY", description = "获取详细统计数据")
     public Result<Map<String, Object>> getDetailStatistics(
             @Parameter(description = "开始日期") 
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,

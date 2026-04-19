@@ -1,6 +1,5 @@
 package com.jz.miniapp.controller.admin;
 
-import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.AnonymousAccess;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.common.UserContext;
@@ -50,7 +49,6 @@ public class AdminAuthController {
     @AnonymousAccess
     @PostMapping("/login")
     @Operation(summary = "管理员登录", description = "管理员账号密码登录")
-    @LogOperation(module = "认证管理", action = "LOGIN", description = "管理员登录")
     public Result<AdminLoginVO> login(@Valid @RequestBody AdminLoginDTO dto) {
         log.info("管理员登录请求 - username: {}", dto.getUsername());
 

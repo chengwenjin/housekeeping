@@ -1,7 +1,6 @@
 package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.Order;
 import com.jz.miniapp.service.OrderService;
@@ -28,7 +27,6 @@ public class AdminOrderController {
 
     @GetMapping
     @Operation(summary = "获取订单列表", description = "管理员查看所有订单")
-    @LogOperation(module = "订单管理", action = "QUERY", description = "查询订单列表")
     public Result<Page<OrderVO>> getOrders(
             @Parameter(description = "页码", example = "1") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量", example = "10") @RequestParam(defaultValue = "10") int pageSize,
@@ -61,7 +59,6 @@ public class AdminOrderController {
 
     @GetMapping("/{id}")
     @Operation(summary = "获取订单详情", description = "管理员查看订单详细信息")
-    @LogOperation(module = "订单管理", action = "QUERY", description = "查询订单详情")
     public Result<OrderVO> getOrderById(
             @Parameter(description = "订单 ID", required = true) @PathVariable Long id) {
         
@@ -77,7 +74,6 @@ public class AdminOrderController {
 
     @PostMapping("/{id}/force-cancel")
     @Operation(summary = "强制取消订单", description = "管理员强制取消订单")
-    @LogOperation(module = "订单管理", action = "UPDATE", description = "强制取消订单")
     public Result<Void> forceCancelOrder(
             @Parameter(description = "订单 ID", required = true) @PathVariable Long id,
             @Parameter(description = "取消原因", required = true) @RequestParam String reason) {

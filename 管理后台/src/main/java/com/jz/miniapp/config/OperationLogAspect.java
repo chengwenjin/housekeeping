@@ -199,24 +199,24 @@ public class OperationLogAspect {
         return "其他";
     }
 
-    private boolean shouldSaveLog(OperationLog log) {
+    private boolean shouldSaveLog(OperationLog operationLog) {
         log.info("========== shouldSaveLog 检查 ==========");
-        log.info("URL: {}", log.getUrl());
-        log.info("Action: {}", log.getAction());
-        log.info("Module: {}", log.getModule());
-        log.info("AdminId: {}", log.getAdminId());
+        log.info("URL: {}", operationLog.getUrl());
+        log.info("Action: {}", operationLog.getAction());
+        log.info("Module: {}", operationLog.getModule());
+        log.info("AdminId: {}", operationLog.getAdminId());
         
-        if (log.getUrl() == null) {
+        if (operationLog.getUrl() == null) {
             log.info("shouldSaveLog 返回 false - URL 为 null");
             return false;
         }
         
-        if (log.getUrl().contains("/admin/logs")) {
+        if (operationLog.getUrl().contains("/admin/logs")) {
             log.info("shouldSaveLog 返回 false - 是操作日志查询接口");
             return false;
         }
         
-        if (!log.getUrl().contains("/admin/")) {
+        if (!operationLog.getUrl().contains("/admin/")) {
             log.info("shouldSaveLog 返回 false - URL 不包含 /admin/");
             return false;
         }

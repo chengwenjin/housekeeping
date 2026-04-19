@@ -155,13 +155,13 @@ public class LogOperationAspect {
         }
     }
 
-    private boolean shouldSaveLog(OperationLog log) {
-        if (log.getUrl() == null) {
+    private boolean shouldSaveLog(OperationLog operationLog) {
+        if (operationLog.getUrl() == null) {
             log.warn("URL 为 null，不保存");
             return false;
         }
         
-        if (log.getUrl().contains("/admin/logs")) {
+        if (operationLog.getUrl().contains("/admin/logs")) {
             log.info("是操作日志查询接口，不保存");
             return false;
         }

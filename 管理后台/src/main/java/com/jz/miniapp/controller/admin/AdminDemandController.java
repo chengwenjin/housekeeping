@@ -1,7 +1,6 @@
 package com.jz.miniapp.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jz.miniapp.annotation.LogOperation;
 import com.jz.miniapp.common.Result;
 import com.jz.miniapp.entity.Demand;
 import com.jz.miniapp.service.DemandService;
@@ -29,7 +28,6 @@ public class AdminDemandController {
 
     @GetMapping
     @Operation(summary = "获取需求列表", description = "管理员查看需求列表")
-    @LogOperation(module = "需求管理", action = "QUERY", description = "查询需求列表")
     public Result<Page<DemandVO>> getDemands(
             @Parameter(description = "页码", example = "1") @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "每页数量", example = "10") @RequestParam(defaultValue = "10") int pageSize,
@@ -52,7 +50,6 @@ public class AdminDemandController {
 
     @GetMapping("/{id}")
     @Operation(summary = "获取需求详情", description = "管理员查看需求详细信息")
-    @LogOperation(module = "需求管理", action = "QUERY", description = "查询需求详情")
     public Result<DemandVO> getDemandById(
             @Parameter(description = "需求 ID", required = true) @PathVariable Long id) {
         
@@ -68,7 +65,6 @@ public class AdminDemandController {
 
     @PutMapping("/{id}/offline")
     @Operation(summary = "下架需求", description = "管理员下架违规需求")
-    @LogOperation(module = "需求管理", action = "UPDATE", description = "下架需求")
     public Result<Void> offlineDemand(
             @Parameter(description = "需求 ID", required = true) @PathVariable Long id) {
         
@@ -87,7 +83,6 @@ public class AdminDemandController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除需求", description = "管理员删除需求")
-    @LogOperation(module = "需求管理", action = "DELETE", description = "删除需求")
     public Result<Void> deleteDemand(
             @Parameter(description = "需求 ID", required = true) @PathVariable Long id) {
         
